@@ -320,7 +320,7 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
             new Item
             {
                 ItemId = 1,
-                ItemName = "Abisko vadász mellény",
+                ItemName = "AAAAAAAAAAAAAAAAAAAAAAAAAAA",
                 ItemDescription = "Vadász mellény",
                 Category = "Coat",
                 Price = 68900,
