@@ -1,0 +1,274 @@
+﻿@*@inherits DotNetNuke.Web.Mvc.Framework.DnnWebViewPage<IEnumerable< Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Models.Item >>
+
+    @using System.Text.RegularExpressions
+    @using DotNetNuke.Web.Mvc.Helpers
+
+
+    <div id="Items-@Dnn.ModuleContext.ModuleId">
+        @if (Model.Count() == 0)
+        {
+            <p>@Dnn.LocalizeString("NoItems")</p>
+        }
+        else
+        {
+            <ul class="tm_tl">
+                @foreach (var item in Model)
+                {
+                    <li class="tm_t">
+                        <h3>@item.ItemName</h3>
+                        <div class="tm_td">@item.ItemDescription</div>
+                        @{
+                            if (Dnn.ModuleContext.IsEditable)
+                            {
+                                <div>
+                                    <a href="@Url.Action("Edit", "Item", new {ctl = "Edit", itemId = item.ItemId})">@Dnn.LocalizeString("EditItem")</a>
+                                    <a href="@Url.Action("Delete", "Item", new {itemId = item.ItemId})">@Dnn.LocalizeString("DeleteItem")</a>
+                                </div>
+                            }
+                        }
+                    </li>
+                }
+            </ul>
+        }
+    </div>*@
+
+
+
+
+
+
+
+
+
+@*@inherits DotNetNuke.Web.Mvc.Framework.DnnWebViewPage<Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Models.BundleViewModel>
+
+    @using System.Web.Mvc
+    @using System.Web.Mvc.Html
+
+    <div class="bundle-builder">
+        <h1>Egyéni csomag összeállítás</h1>
+
+        <div class="bundle-steps">
+            <div class="bundle-step @(Model.CurrentStep == 1 ? "active" : "")">1. Lépés</div>
+            <div class="bundle-step @(Model.CurrentStep == 2 ? "active" : "")">2. Lépés</div>
+            <div class="bundle-step @(Model.CurrentStep == 3 ? "active" : "")">3. Lépés</div>
+        </div>
+
+        <div class="bundle-info-box">
+            Ha kiválasztasz egy kabátot, egy nadrágot és egy bakancsot,
+            akkor a teljes csomagra <strong>15% kedvezményt</strong> kapsz.
+        </div>
+
+        @if (Model.CurrentStep == 1)
+        {
+            <h2>Kabát</h2>
+            <p class="bundle-subtitle">Válassz ki egy kabátot</p>
+
+            <div class="bundle-product-grid">
+                @foreach (var item in Model.Coats)
+                {
+                    <div class="bundle-product-card">
+                        <div class="bundle-product-title">
+                            @item.ItemName
+                        </div>
+
+                        <div class="bundle-product-image-wrapper">
+                            <img src="@item.ImageUrl" alt="@item.ItemName" class="bundle-product-image" />
+                        </div>
+
+                        <div class="bundle-product-footer">
+                            <div class="bundle-product-price">
+                                @item.Price.ToString("N0") Ft
+                            </div>
+
+                            @using (Html.BeginForm("SelectItem", "Item", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                @Html.HiddenFor(m => m.CurrentStep)
+                                @Html.HiddenFor(m => m.SelectedCoatId)
+                                @Html.HiddenFor(m => m.SelectedPantsId)
+                                @Html.HiddenFor(m => m.SelectedBootId)
+
+                                <input type="hidden" name="selectedItemId" value="@item.ItemId" />
+                                <input type="hidden" name="category" value="Coat" />
+
+                                <button type="submit" class="bundle-add-button">
+                                    🛒 Add To Cart
+                                </button>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        @if (Model.CurrentStep == 2)
+        {
+            <h2>Nadrág</h2>
+            <p class="bundle-subtitle">Válassz ki egy nadrágot</p>
+
+            <div class="bundle-product-grid">
+                @foreach (var item in Model.Pants)
+                {
+                    <div class="bundle-product-card">
+                        <div class="bundle-product-title">
+                            @item.ItemName
+                        </div>
+
+                        <div class="bundle-product-image-wrapper">
+                            <img src="@item.ImageUrl" alt="@item.ItemName" class="bundle-product-image" />
+                        </div>
+
+                        <div class="bundle-product-footer">
+                            <div class="bundle-product-price">
+                                @item.Price.ToString("N0") Ft
+                            </div>
+
+                            @using (Html.BeginForm("SelectItem", "Item", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                @Html.HiddenFor(m => m.CurrentStep)
+                                @Html.HiddenFor(m => m.SelectedCoatId)
+                                @Html.HiddenFor(m => m.SelectedPantsId)
+                                @Html.HiddenFor(m => m.SelectedBootId)
+
+                                <input type="hidden" name="selectedItemId" value="@item.ItemId" />
+                                <input type="hidden" name="category" value="Pants" />
+
+                                <button type="submit" class="bundle-add-button">
+                                    🛒 Add To Cart
+                                </button>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        @if (Model.CurrentStep == 3)
+        {
+            <h2>Bakancs</h2>
+            <p class="bundle-subtitle">Válassz ki egy bakancsot</p>
+
+            <div class="bundle-product-grid">
+                @foreach (var item in Model.Boots)
+                {
+                    <div class="bundle-product-card">
+                        <div class="bundle-product-title">
+                            @item.ItemName
+                        </div>
+
+                        <div class="bundle-product-image-wrapper">
+                            <img src="@item.ImageUrl" alt="@item.ItemName" class="bundle-product-image" />
+                        </div>
+
+                        <div class="bundle-product-footer">
+                            <div class="bundle-product-price">
+                                @item.Price.ToString("N0") Ft
+                            </div>
+
+                            @using (Html.BeginForm("SelectItem", "Item", FormMethod.Post))
+                            {
+                                @Html.AntiForgeryToken()
+
+                                @Html.HiddenFor(m => m.CurrentStep)
+                                @Html.HiddenFor(m => m.SelectedCoatId)
+                                @Html.HiddenFor(m => m.SelectedPantsId)
+                                @Html.HiddenFor(m => m.SelectedBootId)
+
+                                <input type="hidden" name="selectedItemId" value="@item.ItemId" />
+                                <input type="hidden" name="category" value="Boots" />
+
+                                <button type="submit" class="bundle-add-button">
+                                    🛒 Add To Cart
+                                </button>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+
+        @if (Model.CurrentStep == 4)
+        {
+            <h2>Csomag összesítő</h2>
+            <p class="bundle-subtitle">A kiválasztott termékek alapján számított csomagár</p>
+
+            <div class="bundle-summary">
+                <div class="bundle-summary-row">
+                    <span>Eredeti ár:</span>
+                    <strong>@Model.OriginalTotal.ToString("N0") Ft</strong>
+                </div>
+
+                <div class="bundle-summary-row">
+                    <span>Kedvezmény:</span>
+                    <strong>@Model.DiscountAmount.ToString("N0") Ft</strong>
+                </div>
+
+                <div class="bundle-summary-row bundle-summary-total">
+                    <span>Fizetendő:</span>
+                    <strong>@Model.DiscountedTotal.ToString("N0") Ft</strong>
+                </div>
+            </div>
+        }
+    </div>*@
+
+
+
+
+
+
+
+
+@*@inherits DotNetNuke.Web.Mvc.Framework.DnnWebViewPage
+
+    <div style="padding:30px; background:#f4f6ef; border:3px solid #435836;">
+        <h1>TESZT - A modul betöltött</h1>
+        <p>Ha ezt látod, akkor az Index.cshtml renderelődik.</p>
+    </div>*@
+
+
+
+
+@inherits DotNetNuke.Web.Mvc.Framework.DnnWebViewPage<Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Models.BundleViewModel>
+<link rel="stylesheet" href="/DesktopModules/MVC/Dnn_Vadnyom_HelloWorld/module.css" />
+
+<div class="bundle-builder">
+    <h1>Egyéni csomag összeállítás</h1>
+
+    <div class="bundle-steps">
+        <div class="bundle-step active">1. Lépés</div>
+        <div class="bundle-step">2. Lépés</div>
+        <div class="bundle-step">3. Lépés</div>
+    </div>
+
+    <h2>Kabát</h2>
+    <p class="bundle-subtitle">Válassz ki egy kabátot</p>
+
+    <div class="bundle-product-grid">
+        @foreach (var item in Model.Coats)
+        {
+            <div class="bundle-product-card">
+                <div class="bundle-product-title">
+                    @item.ItemName
+                </div>
+
+                <div class="bundle-product-image-wrapper">
+                    <img src="@item.ImageUrl" alt="@item.ItemName" class="bundle-product-image" />
+                </div>
+
+                <div class="bundle-product-footer">
+                    <div class="bundle-product-price">
+                        @item.Price.ToString("N0") Ft
+                    </div>
+
+                    <button type="button" class="bundle-add-button">
+                        🛒 Add To Cart
+                    </button>
+                </div>
+            </div>
+        }
+    </div>
+</div>
