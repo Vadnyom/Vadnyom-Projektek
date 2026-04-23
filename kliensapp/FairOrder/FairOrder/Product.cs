@@ -6,12 +6,28 @@ using System.Threading.Tasks;
 
 namespace FairOrder
 {
-    class Product
+    public class Product
     {
-        public string ProductId { get; set; }
+        public string Bvin { get; set; }
         public string Sku { get; set; }
         public string ProductName { get; set; }
         public decimal Price { get; set; }
         public bool IsAvailableForSale { get; set; }
+
+    }
+    //public class Product
+    //{
+    //    public string Sku { get; set; }
+    //    public string ProductName { get; set; }
+    //}
+
+    public class HotcakesProductResponse
+    {
+        public HotcakesContent Content { get; set; }
+    }
+
+    public class HotcakesContent
+    {
+        public List<Product> Products { get; set; }
     }
 }
