@@ -20,6 +20,7 @@ namespace FairOrder
     //    public string Sku { get; set; }
     //    public string ProductName { get; set; }
     //}
+    //
 
     public class HotcakesProductResponse
     {
