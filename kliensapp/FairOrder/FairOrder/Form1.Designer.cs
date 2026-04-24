@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             imageList1 = new ImageList(components);
             SkuSearch = new TextBox();
             User = new Button();
@@ -106,21 +107,35 @@
             // 
             // Add
             // 
-            Add.Location = new Point(445, 162);
+            Add.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            Add.BackColor = Color.FromArgb(69, 91, 60);
+            Add.FlatAppearance.BorderColor = Color.White;
+            Add.FlatAppearance.BorderSize = 0;
+            Add.FlatStyle = FlatStyle.Flat;
+            Add.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            Add.ForeColor = Color.FromArgb(228, 231, 222);
+            Add.Location = new Point(445, 153);
+            Add.Margin = new Padding(0);
             Add.Name = "Add";
-            Add.Size = new Size(50, 29);
+            Add.Size = new Size(50, 42);
             Add.TabIndex = 6;
             Add.Text = "+";
-            Add.UseVisualStyleBackColor = true;
+            Add.UseVisualStyleBackColor = false;
             // 
             // Delete
             // 
-            Delete.Location = new Point(520, 162);
+            Delete.BackColor = Color.FromArgb(69, 91, 60);
+            Delete.BackgroundImageLayout = ImageLayout.None;
+            Delete.FlatAppearance.BorderSize = 0;
+            Delete.FlatStyle = FlatStyle.Flat;
+            Delete.Font = new Font("Segoe UI", 11F, FontStyle.Bold);
+            Delete.ForeColor = Color.FromArgb(228, 231, 222);
+            Delete.Location = new Point(520, 153);
             Delete.Name = "Delete";
-            Delete.Size = new Size(50, 29);
+            Delete.Size = new Size(50, 42);
             Delete.TabIndex = 7;
             Delete.Text = "-";
-            Delete.UseVisualStyleBackColor = true;
+            Delete.UseVisualStyleBackColor = false;
             // 
             // AddProduct
             // 
@@ -205,7 +220,8 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(981, 453);
+            BackColor = Color.White;
+            ClientSize = new Size(992, 481);
             Controls.Add(FullPriceText);
             Controls.Add(VATText);
             Controls.Add(PriceText);
@@ -223,6 +239,9 @@
             Controls.Add(OrderList);
             Controls.Add(User);
             Controls.Add(SkuSearch);
+            ForeColor = Color.FromArgb(31, 54, 4);
+            HelpButton = true;
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "Form1";
             Text = "Form1";
             Load += Form1_Load;
