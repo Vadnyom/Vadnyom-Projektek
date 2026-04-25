@@ -18,10 +18,12 @@ namespace FairOrder
         private readonly string _apiKey = "1-ce7c4f35-5308-40ef-a54f-74ec9333e365";
 
         private List<Product> _osszesTermek = new List<Product>();
+        private List<KosarTetel> _kosar = new List<KosarTetel>();
 
         public Form1()
         {
             InitializeComponent();
+            QuantityText.Text = "1";
             Load += async (s, e) => await ToltsdBeTermekeit();
         }
         //private async Task ToltsdBeTermekeit()
@@ -68,7 +70,7 @@ namespace FairOrder
                 MessageBox.Show($"Hiba: {ex.Message}");
             }
         }
-        
+
         private void FrissitdAListat(string szuroSku)
         {
             var szurt = string.IsNullOrWhiteSpace(szuroSku)
@@ -91,6 +93,88 @@ namespace FairOrder
         private void SkuSearch_TextChanged(object sender, EventArgs e)
         {
             FrissitdAListat(SkuSearch.Text);
+        }
+
+        private void Order_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Add_Click(object sender, EventArgs e)
+        {
+            if (int.TryParse(QuantityText.Text, out int ertek))
+                QuantityText.Text = (ertek + 1).ToString();
+        }
+
+        private void Delete_Click(object sender, EventArgs e)
+        {
+            if (int.TryParse(QuantityText.Text, out int ertek) && ertek > 1)
+                QuantityText.Text = (ertek - 1).ToString();
+        }
+
+        private void AddProduct_Click(object sender, EventArgs e)
+        {
+            if (FilteredSku.SelectedItem is not Product kivalasztott)
+            {
+                MessageBox.Show("Válassz ki egy terméket a listából.");
+                return;
+            }
+
+            if (!int.TryParse(QuantityText.Text, out int mennyiseg) || mennyiseg < 1)
+            {
+                MessageBox.Show("Érvénytelen mennyiség.");
+                return;
+            }
+            var meglevo = _kosar.FirstOrDefault(k => k.Bvin == kivalasztott.Bvin);
+            if (meglevo != null)
+            {
+                meglevo.Mennyiseg += mennyiseg;
+            }
+            else
+            {
+                _kosar.Add(new KosarTetel
+                {
+                    Bvin = kivalasztott.Bvin,
+                    Sku = kivalasztott.Sku,
+                    ProductName = kivalasztott.ProductName,
+                    SitePrice = kivalasztott.SitePrice,
+                    Mennyiseg = mennyiseg
+                });
+            }
+
+            FrissitdAKosarat();
+        }
+
+        private void FrissitdAKosarat()
+        {
+            OrderList.DataSource = null;
+            OrderList.DataSource = _kosar.ToList();
+            OrderList.DisplayMember = "ToString";
+
+            var reszosszeg = _kosar.Sum(k => k.Osszesen);
+            decimal afa = reszosszeg - (reszosszeg / 1.27m);
+            decimal netto = reszosszeg / 1.27m;
+
+            PriceText.Text = $"{netto:N0} Ft";
+            VATText.Text = $"{afa:N0} Ft";
+            FullPriceText.Text = $"{reszosszeg:N0} Ft";
+        }
+
+        private void FilteredSku_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            QuantityText.Text = "1";
+        }
+
+        private void DelCart_Click(object sender, EventArgs e)
+        {
+            if (OrderList.SelectedItem is not KosarTetel kivalasztott)
+            {
+                MessageBox.Show("Válassz ki egy elemet a kosárból.");
+                return;
+            }
+
+            _kosar.Remove(kivalasztott);
+            FrissitdAKosarat();
         }
     }
 }
