@@ -34,7 +34,7 @@
             SkuSearch = new TextBox();
             User = new Button();
             OrderList = new ListBox();
-            Order = new Button();
+            OrderButton = new Button();
             FilteredSku = new ListBox();
             QuantityText = new TextBox();
             Add = new Button();
@@ -85,15 +85,15 @@
             OrderList.Size = new Size(305, 164);
             OrderList.TabIndex = 2;
             // 
-            // Order
+            // OrderButton
             // 
-            Order.Location = new Point(819, 424);
-            Order.Name = "Order";
-            Order.Size = new Size(117, 29);
-            Order.TabIndex = 3;
-            Order.Text = "Megrendelés";
-            Order.UseVisualStyleBackColor = true;
-            Order.Click += Order_Click;
+            OrderButton.Location = new Point(819, 424);
+            OrderButton.Name = "OrderButton";
+            OrderButton.Size = new Size(117, 29);
+            OrderButton.TabIndex = 3;
+            OrderButton.Text = "Megrendelés";
+            OrderButton.UseVisualStyleBackColor = true;
+            OrderButton.Click += Order_Click;
             // 
             // FilteredSku
             // 
@@ -265,7 +265,7 @@
             Controls.Add(Add);
             Controls.Add(QuantityText);
             Controls.Add(FilteredSku);
-            Controls.Add(Order);
+            Controls.Add(OrderButton);
             Controls.Add(OrderList);
             Controls.Add(SkuSearch);
             ForeColor = Color.FromArgb(31, 54, 4);
@@ -285,7 +285,7 @@
         private TextBox SkuSearch;
         private Button User;
         private ListBox OrderList;
-        private Button Order;
+        private Button OrderButton;
         private ListBox FilteredSku;
         private TextBox QuantityText;
         private Button Add;

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
@@ -95,10 +96,102 @@ namespace FairOrder
             FrissitdAListat(SkuSearch.Text);
         }
 
-        private void Order_Click(object sender, EventArgs e)
+        private async void Order_Click(object sender, EventArgs e)
         {
+         
+            if (_kosar.Count == 0)
+            {
+                MessageBox.Show("A kosár üres.");
+                return;
+            }
 
+             OrderButton.Enabled = false;
+
+            var allOrdersJson = await _client.GetStringAsync(
+        $"{_baseUrl}/DesktopModules/Hotcakes/API/rest/v1/orders?key={_apiKey}");
+            var allOrders = JsonConvert.DeserializeObject<dynamic>(allOrdersJson);
+
+            int maxOrderNumber = 0;
+            foreach (var order in allOrders.Content)
+            {
+                if (int.TryParse((string)order.OrderNumber, out int num))
+                    if (num > maxOrderNumber)
+                        maxOrderNumber = num;
+            }
+            string nextOrderNumber = (maxOrderNumber + 1).ToString();
+
+            try
+            {
+                var vegosszeg = _kosar.Sum(k => k.SitePrice * k.Mennyiseg);
+                // 1. Rendelés létrehozása
+                var orderRequest = new OrderRequest
+                {
+                    UserEmail = "vadnyom1@gmail.com",
+                    UserID = "1",
+                    IsPlaced = true,
+                    TotalGrand = vegosszeg,
+                    StatusCode = "09D7305D-BD95-48d2-A025-16ADC827582A",
+                    BillingAddress = new BillingAddress
+                    {
+                        FirstName = "Teszt",
+                        LastName = "Felhasználó",
+                        CountryName = "Hungary"
+                    },
+
+                    Items = _kosar.Select(k => new OrderItem
+                    {
+                        //ProductId = k.Bvin,
+                        //Quantity = k.Mennyiseg,
+                        //BasePricePerItem = k.SitePrice,
+                        //ProductName = k.ProductName,
+                        //ProductSku = k.Sku
+                        ProductId = k.Bvin,
+                        Quantity = k.Mennyiseg,
+                        BasePricePerItem = k.SitePrice,
+                        AdjustedPricePerItem = k.SitePrice,
+                        LineTotal = k.SitePrice * k.Mennyiseg,
+                        ProductName = k.ProductName,
+                        ProductSku = k.Sku,
+                        TaxSchedule = 2,
+                        ShipFromMode = 1
+
+                    }).ToList()
+                };
+
+                var orderJson = JsonConvert.SerializeObject(orderRequest);
+                var orderContent = new StringContent(orderJson, Encoding.UTF8, "application/json");
+
+                //var orderResponse = await _client.PostAsync(
+                //    $"{_baseUrl}/DesktopModules/Hotcakes/API/rest/v1/orders?key={_apiKey}",
+                //    orderContent);
+                var orderResponse = await _client.PostAsync(
+                       $"{_baseUrl}/DesktopModules/Hotcakes/API/rest/v1/orders?key={_apiKey}&recalculateOrder=true",
+                        orderContent);
+
+                orderResponse.EnsureSuccessStatusCode();
+
+                var orderResponseJson = await orderResponse.Content.ReadAsStringAsync();
+                var orderResult = JsonConvert.DeserializeObject<dynamic>(orderResponseJson);
+                string bvin = orderResult.Content.bvin;
+
+                
+                MessageBox.Show("Rendelés sikeresen leadva!");
+                _kosar.Clear();
+                FrissitdAKosarat();
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Hiba: {ex.Message}");
+            }
+            finally
+            {
+                OrderButton.Enabled = true;
+            }
+            _kosar.Clear();
+            FrissitdAKosarat();
         }
+        
 
         private void Add_Click(object sender, EventArgs e)
         {
