@@ -109,14 +109,21 @@ namespace FairOrder
 
             try
             {
-                var vegosszeg = _kosar.Sum(k => k.SitePrice * k.Mennyiseg);
+                //var vegosszeg = _kosar.Sum(k => k.SitePrice * k.Mennyiseg);
+                var bruttoOsszeg = _kosar.Sum(k => k.SitePrice * k.Mennyiseg);
+                decimal nettoOsszeg = bruttoOsszeg / 1.27m;
+                decimal afa = bruttoOsszeg - nettoOsszeg;
                 // 1. Rendelés létrehozása
                 var orderRequest = new OrderRequest
                 {
                     UserEmail = "vadnyom1@gmail.com",
                     UserID = "1",
                     IsPlaced = true,
-                    TotalGrand = vegosszeg,
+                    //TotalGrand = vegosszeg,
+                    TotalGrand = bruttoOsszeg,
+                    TotalOrderBeforeDiscounts = nettoOsszeg,
+                    ItemsTax = afa,
+                    TotalTax = afa,
                     StatusCode = "09D7305D-BD95-48d2-A025-16ADC827582A",
                     OrderNumber = nextOrderNumber,
                     BillingAddress = new BillingAddress
@@ -134,6 +141,8 @@ namespace FairOrder
                         BasePricePerItem = k.SitePrice,
                         AdjustedPricePerItem = k.SitePrice,
                         LineTotal = k.SitePrice * k.Mennyiseg,
+                        TaxRate = 0.27m,
+                        TaxPortion = (k.SitePrice * k.Mennyiseg) - (k.SitePrice * k.Mennyiseg / 1.27m),
                         ProductName = k.ProductName,
                         ProductSku = k.Sku,
                         TaxSchedule = 2,
@@ -145,7 +154,7 @@ namespace FairOrder
                 var orderJson = JsonConvert.SerializeObject(orderRequest);
                 var orderContent = new StringContent(orderJson, Encoding.UTF8, "application/json");
 
-                
+               
                 var orderResponse = await _client.PostAsync(
                        $"{_baseUrl}/DesktopModules/Hotcakes/API/rest/v1/orders?key={_apiKey}&recalculateOrder=true",
                         orderContent);
@@ -155,6 +164,17 @@ namespace FairOrder
                 var orderResponseJson = await orderResponse.Content.ReadAsStringAsync();
                 var orderResult = JsonConvert.DeserializeObject<dynamic>(orderResponseJson);
                 string bvin = orderResult.Content.bvin;
+
+                var updateRequest = new
+                {
+                    Bvin = bvin,
+                    OrderNumber = nextOrderNumber
+                };
+                var updateJson = JsonConvert.SerializeObject(updateRequest);
+                var updateContent = new StringContent(updateJson, Encoding.UTF8, "application/json");
+                await _client.PostAsync(
+                    $"{_baseUrl}/DesktopModules/Hotcakes/API/rest/v1/orders/{bvin}?key={_apiKey}",
+                    updateContent);
 
 
                 MessageBox.Show("Rendelés sikeresen leadva!");

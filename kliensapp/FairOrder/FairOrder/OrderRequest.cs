@@ -19,6 +19,10 @@ namespace FairOrder
 
         public string StatusCode { get; set; }
         public string OrderNumber { get; set; }
+        public bool ApplyVATRules { get; set; } = true;
+        public decimal TotalOrderBeforeDiscounts { get; set; }
+        public decimal ItemsTax { get; set; }
+        public decimal TotalTax { get; set; }
 
     }
 
@@ -41,6 +45,9 @@ namespace FairOrder
         public int TaxSchedule { get; set; } = 2;
         public int ShipFromMode { get; set; } = 1;
         public int StoreId { get; set; } = 1;
+        public bool IsTaxExempt { get; set; } = false;
+        public decimal TaxRate { get; set; } = 0.27m;
+        public decimal TaxPortion { get; set; }
     }
 
     public class BillingAddress
