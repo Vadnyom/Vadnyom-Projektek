@@ -14,9 +14,15 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Models
         public int? SelectedPantsId { get; set; }
         public int? SelectedBootId { get; set; }
 
+        public Item SelectedCoat { get; set; }
+        public Item SelectedPants { get; set; }
+        public Item SelectedBoot { get; set; }
+
         public decimal OriginalTotal { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal DiscountedTotal { get; set; }
+
+        public string ErrorMessage { get; set; }
 
         public bool HasCompleteBundle
         {
