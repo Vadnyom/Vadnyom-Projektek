@@ -1,202 +1,226 @@
-﻿@*@inherits DotNetNuke.Web.Mvc.Framework.DnnWebViewPage<IEnumerable< Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Models.Item >>
+﻿@inherits DotNetNuke.Web.Mvc.Framework.DnnWebViewPage<Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Models.BundleViewModel>
+<link rel="stylesheet" href="/DesktopModules/MVC/Dnn_Vadnyom_HelloWorld/module.css" />
 
-    @using System.Text.RegularExpressions
-    @using DotNetNuke.Web.Mvc.Helpers
+<div class="bundle-builder">
+    <h1>Egyéni csomag összeállítás</h1>
 
+    <form id="bundleForm" method="post" action="@Url.Action("Index", "Item")">
+        <input type="hidden" name="CurrentStep" value="@Model.CurrentStep" />
 
-    <div id="Items-@Dnn.ModuleContext.ModuleId">
-        @if (Model.Count() == 0)
+        @if (Model.CurrentStep > 0)
         {
-            <p>@Dnn.LocalizeString("NoItems")</p>
+            <div class="bundle-steps">
+                <button type="submit" name="navigation" value="step1" class="bundle-step @(Model.CurrentStep == 1 ? "active" : "")">1. Lépés</button>
+                <button type="submit" name="navigation" value="step2" class="bundle-step @(Model.CurrentStep == 2 ? "active" : "")">2. Lépés</button>
+                <button type="submit" name="navigation" value="step3" class="bundle-step @(Model.CurrentStep == 3 ? "active" : "")">3. Lépés</button>
+            </div>
         }
-        else
+
+        @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
         {
-            <ul class="tm_tl">
-                @foreach (var item in Model)
-                {
-                    <li class="tm_t">
-                        <h3>@item.ItemName</h3>
-                        <div class="tm_td">@item.ItemDescription</div>
-                        @{
-                            if (Dnn.ModuleContext.IsEditable)
-                            {
-                                <div>
-                                    <a href="@Url.Action("Edit", "Item", new {ctl = "Edit", itemId = item.ItemId})">@Dnn.LocalizeString("EditItem")</a>
-                                    <a href="@Url.Action("Delete", "Item", new {itemId = item.ItemId})">@Dnn.LocalizeString("DeleteItem")</a>
-                                </div>
-                            }
-                        }
-                    </li>
-                }
-            </ul>
+            <div class="bundle-error-message">
+                @Model.ErrorMessage
+            </div>
         }
-    </div>*@
 
+        @if (Model.CurrentStep == 0)
+        {
+            <div class="bundle-start-screen">
+                <h2>Állítsd össze saját csomagodat!</h2>
 
+                <div class="bundle-start-text">
+                    Válassz egy <strong>kabátot</strong>, egy <strong>nadrágot</strong> és egy <strong>bakancsot</strong>,
+                    majd vásárold meg őket egy csomagban.
+                </div>
 
+                <div class="bundle-start-highlight">
+                    Ha mindhárom kategóriából választasz egy terméket, a teljes csomagra
+                    <strong>15% kedvezményt</strong> kapsz.
+                </div>
 
+                <div class="bundle-start-steps">
+                    <div class="bundle-start-step-box">1. Kabát kiválasztása</div>
+                    <div class="bundle-start-step-box">2. Nadrág kiválasztása</div>
+                    <div class="bundle-start-step-box">3. Bakancs kiválasztása</div>
+                    <div class="bundle-start-step-box">4. Ellenőrzés és összesítés</div>
+                </div>
 
-
-
-
-
-@*@inherits DotNetNuke.Web.Mvc.Framework.DnnWebViewPage<Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Models.BundleViewModel>
-
-    @using System.Web.Mvc
-    @using System.Web.Mvc.Html
-
-    <div class="bundle-builder">
-        <h1>Egyéni csomag összeállítás</h1>
-
-        <div class="bundle-steps">
-            <div class="bundle-step @(Model.CurrentStep == 1 ? "active" : "")">1. Lépés</div>
-            <div class="bundle-step @(Model.CurrentStep == 2 ? "active" : "")">2. Lépés</div>
-            <div class="bundle-step @(Model.CurrentStep == 3 ? "active" : "")">3. Lépés</div>
-        </div>
-
-        <div class="bundle-info-box">
-            Ha kiválasztasz egy kabátot, egy nadrágot és egy bakancsot,
-            akkor a teljes csomagra <strong>15% kedvezményt</strong> kapsz.
-        </div>
+                <div class="bundle-nav">
+                    <button type="submit" name="navigation" value="start" class="bundle-next-button">
+                        Csomag összeállítása
+                    </button>
+                </div>
+            </div>
+        }
 
         @if (Model.CurrentStep == 1)
         {
+            <input type="hidden" name="SelectedPantsId" value="@(Model.SelectedPantsId.HasValue ? Model.SelectedPantsId.ToString() : "")" />
+            <input type="hidden" name="SelectedBootId" value="@(Model.SelectedBootId.HasValue ? Model.SelectedBootId.ToString() : "")" />
+
             <h2>Kabát</h2>
             <p class="bundle-subtitle">Válassz ki egy kabátot</p>
 
             <div class="bundle-product-grid">
                 @foreach (var item in Model.Coats)
                 {
-                    <div class="bundle-product-card">
-                        <div class="bundle-product-title">
-                            @item.ItemName
+                    <div class="bundle-product-card selectable-card">
+                        <div class="bundle-card-select">
+                            <input type="radio"
+                                   name="SelectedCoatId"
+                                   value="@item.ItemId"
+                                   @(Model.SelectedCoatId == item.ItemId ? "checked=\"checked\"" : "") />
                         </div>
+
+                        <div class="bundle-product-title">@item.ItemName</div>
 
                         <div class="bundle-product-image-wrapper">
                             <img src="@item.ImageUrl" alt="@item.ItemName" class="bundle-product-image" />
                         </div>
 
                         <div class="bundle-product-footer">
-                            <div class="bundle-product-price">
-                                @item.Price.ToString("N0") Ft
-                            </div>
-
-                            @using (Html.BeginForm("SelectItem", "Item", FormMethod.Post))
-                            {
-                                @Html.AntiForgeryToken()
-
-                                @Html.HiddenFor(m => m.CurrentStep)
-                                @Html.HiddenFor(m => m.SelectedCoatId)
-                                @Html.HiddenFor(m => m.SelectedPantsId)
-                                @Html.HiddenFor(m => m.SelectedBootId)
-
-                                <input type="hidden" name="selectedItemId" value="@item.ItemId" />
-                                <input type="hidden" name="category" value="Coat" />
-
-                                <button type="submit" class="bundle-add-button">
-                                    🛒 Add To Cart
-                                </button>
-                            }
+                            <div class="bundle-product-price">@item.Price.ToString("N0") Ft</div>
                         </div>
                     </div>
                 }
+            </div>
+
+            <div class="bundle-nav">
+                <button type="submit" name="navigation" value="clear" class="bundle-clear-button">Választás törlése</button>
+                <button type="submit" name="navigation" value="next" class="bundle-next-button">Tovább</button>
             </div>
         }
 
         @if (Model.CurrentStep == 2)
         {
+            <input type="hidden" name="SelectedCoatId" value="@(Model.SelectedCoatId.HasValue ? Model.SelectedCoatId.ToString() : "")" />
+            <input type="hidden" name="SelectedBootId" value="@(Model.SelectedBootId.HasValue ? Model.SelectedBootId.ToString() : "")" />
+
             <h2>Nadrág</h2>
             <p class="bundle-subtitle">Válassz ki egy nadrágot</p>
+
+            if (Model.SelectedCoat != null)
+            {
+                <div class="bundle-selected-box">
+                    Kiválasztott kabát: <strong>@Model.SelectedCoat.ItemName</strong>
+                </div>
+            }
 
             <div class="bundle-product-grid">
                 @foreach (var item in Model.Pants)
                 {
-                    <div class="bundle-product-card">
-                        <div class="bundle-product-title">
-                            @item.ItemName
+                    <div class="bundle-product-card selectable-card">
+                        <div class="bundle-card-select">
+                            <input type="radio"
+                                   name="SelectedPantsId"
+                                   value="@item.ItemId"
+                                   @(Model.SelectedPantsId == item.ItemId ? "checked=\"checked\"" : "") />
                         </div>
+
+                        <div class="bundle-product-title">@item.ItemName</div>
 
                         <div class="bundle-product-image-wrapper">
                             <img src="@item.ImageUrl" alt="@item.ItemName" class="bundle-product-image" />
                         </div>
 
                         <div class="bundle-product-footer">
-                            <div class="bundle-product-price">
-                                @item.Price.ToString("N0") Ft
-                            </div>
-
-                            @using (Html.BeginForm("SelectItem", "Item", FormMethod.Post))
-                            {
-                                @Html.AntiForgeryToken()
-
-                                @Html.HiddenFor(m => m.CurrentStep)
-                                @Html.HiddenFor(m => m.SelectedCoatId)
-                                @Html.HiddenFor(m => m.SelectedPantsId)
-                                @Html.HiddenFor(m => m.SelectedBootId)
-
-                                <input type="hidden" name="selectedItemId" value="@item.ItemId" />
-                                <input type="hidden" name="category" value="Pants" />
-
-                                <button type="submit" class="bundle-add-button">
-                                    🛒 Add To Cart
-                                </button>
-                            }
+                            <div class="bundle-product-price">@item.Price.ToString("N0") Ft</div>
                         </div>
                     </div>
                 }
+            </div>
+
+            <div class="bundle-nav">
+                <button type="submit" name="navigation" value="prev" class="bundle-prev-button">Vissza</button>
+                <button type="submit" name="navigation" value="clear" class="bundle-clear-button">Választás törlése</button>
+                <button type="submit" name="navigation" value="next" class="bundle-next-button">Tovább</button>
             </div>
         }
 
         @if (Model.CurrentStep == 3)
         {
+            <input type="hidden" name="SelectedCoatId" value="@(Model.SelectedCoatId.HasValue ? Model.SelectedCoatId.ToString() : "")" />
+            <input type="hidden" name="SelectedPantsId" value="@(Model.SelectedPantsId.HasValue ? Model.SelectedPantsId.ToString() : "")" />
+
             <h2>Bakancs</h2>
             <p class="bundle-subtitle">Válassz ki egy bakancsot</p>
+
+            <div class="bundle-selected-box">
+                @if (Model.SelectedCoat != null)
+                {
+                    <div>Kabát: <strong>@Model.SelectedCoat.ItemName</strong></div>
+                }
+                @if (Model.SelectedPants != null)
+                {
+                    <div>Nadrág: <strong>@Model.SelectedPants.ItemName</strong></div>
+                }
+            </div>
 
             <div class="bundle-product-grid">
                 @foreach (var item in Model.Boots)
                 {
-                    <div class="bundle-product-card">
-                        <div class="bundle-product-title">
-                            @item.ItemName
+                    <div class="bundle-product-card selectable-card">
+                        <div class="bundle-card-select">
+                            <input type="radio"
+                                   name="SelectedBootId"
+                                   value="@item.ItemId"
+                                   @(Model.SelectedBootId == item.ItemId ? "checked=\"checked\"" : "") />
                         </div>
+
+                        <div class="bundle-product-title">@item.ItemName</div>
 
                         <div class="bundle-product-image-wrapper">
                             <img src="@item.ImageUrl" alt="@item.ItemName" class="bundle-product-image" />
                         </div>
 
                         <div class="bundle-product-footer">
-                            <div class="bundle-product-price">
-                                @item.Price.ToString("N0") Ft
-                            </div>
-
-                            @using (Html.BeginForm("SelectItem", "Item", FormMethod.Post))
-                            {
-                                @Html.AntiForgeryToken()
-
-                                @Html.HiddenFor(m => m.CurrentStep)
-                                @Html.HiddenFor(m => m.SelectedCoatId)
-                                @Html.HiddenFor(m => m.SelectedPantsId)
-                                @Html.HiddenFor(m => m.SelectedBootId)
-
-                                <input type="hidden" name="selectedItemId" value="@item.ItemId" />
-                                <input type="hidden" name="category" value="Boots" />
-
-                                <button type="submit" class="bundle-add-button">
-                                    🛒 Add To Cart
-                                </button>
-                            }
+                            <div class="bundle-product-price">@item.Price.ToString("N0") Ft</div>
                         </div>
                     </div>
                 }
+            </div>
+
+            <div class="bundle-nav">
+                <button type="submit" name="navigation" value="prev" class="bundle-prev-button">Vissza</button>
+                <button type="submit" name="navigation" value="clear" class="bundle-clear-button">Választás törlése</button>
+                <button type="submit" name="navigation" value="next" class="bundle-next-button">Tovább</button>
             </div>
         }
 
         @if (Model.CurrentStep == 4)
         {
-            <h2>Csomag összesítő</h2>
-            <p class="bundle-subtitle">A kiválasztott termékek alapján számított csomagár</p>
+            <input type="hidden" name="SelectedCoatId" value="@(Model.SelectedCoatId.HasValue ? Model.SelectedCoatId.ToString() : "")" />
+            <input type="hidden" name="SelectedPantsId" value="@(Model.SelectedPantsId.HasValue ? Model.SelectedPantsId.ToString() : "")" />
+            <input type="hidden" name="SelectedBootId" value="@(Model.SelectedBootId.HasValue ? Model.SelectedBootId.ToString() : "")" />
+
+            <h2>Ellenőrzés</h2>
+            <p class="bundle-subtitle">A kiválasztott termékek</p>
 
             <div class="bundle-summary">
+                @if (Model.SelectedCoat != null)
+                {
+                    <div class="bundle-summary-row">
+                        <span>Kabát</span>
+                        <strong>@Model.SelectedCoat.ItemName</strong>
+                    </div>
+                }
+
+                @if (Model.SelectedPants != null)
+                {
+                    <div class="bundle-summary-row">
+                        <span>Nadrág</span>
+                        <strong>@Model.SelectedPants.ItemName</strong>
+                    </div>
+                }
+
+                @if (Model.SelectedBoot != null)
+                {
+                    <div class="bundle-summary-row">
+                        <span>Bakancs</span>
+                        <strong>@Model.SelectedBoot.ItemName</strong>
+                    </div>
+                }
+
                 <div class="bundle-summary-row">
                     <span>Eredeti ár:</span>
                     <strong>@Model.OriginalTotal.ToString("N0") Ft</strong>
@@ -212,63 +236,10 @@
                     <strong>@Model.DiscountedTotal.ToString("N0") Ft</strong>
                 </div>
             </div>
-        }
-    </div>*@
 
-
-
-
-
-
-
-
-@*@inherits DotNetNuke.Web.Mvc.Framework.DnnWebViewPage
-
-    <div style="padding:30px; background:#f4f6ef; border:3px solid #435836;">
-        <h1>TESZT - A modul betöltött</h1>
-        <p>Ha ezt látod, akkor az Index.cshtml renderelődik.</p>
-    </div>*@
-
-
-
-
-@inherits DotNetNuke.Web.Mvc.Framework.DnnWebViewPage<Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Models.BundleViewModel>
-<link rel="stylesheet" href="/DesktopModules/MVC/Dnn_Vadnyom_HelloWorld/module.css" />
-
-<div class="bundle-builder">
-    <h1>Egyéni csomag összeállítás</h1>
-
-    <div class="bundle-steps">
-        <div class="bundle-step active">1. Lépés</div>
-        <div class="bundle-step">2. Lépés</div>
-        <div class="bundle-step">3. Lépés</div>
-    </div>
-
-    <h2>Kabát</h2>
-    <p class="bundle-subtitle">Válassz ki egy kabátot</p>
-
-    <div class="bundle-product-grid">
-        @foreach (var item in Model.Coats)
-        {
-            <div class="bundle-product-card">
-                <div class="bundle-product-title">
-                    @item.ItemName
-                </div>
-
-                <div class="bundle-product-image-wrapper">
-                    <img src="@item.ImageUrl" alt="@item.ItemName" class="bundle-product-image" />
-                </div>
-
-                <div class="bundle-product-footer">
-                    <div class="bundle-product-price">
-                        @item.Price.ToString("N0") Ft
-                    </div>
-
-                    <button type="button" class="bundle-add-button">
-                        🛒 Add To Cart
-                    </button>
-                </div>
+            <div class="bundle-nav">
+                <button type="submit" name="navigation" value="prev" class="bundle-prev-button">Vissza</button>
             </div>
         }
-    </div>
+    </form>
 </div>
