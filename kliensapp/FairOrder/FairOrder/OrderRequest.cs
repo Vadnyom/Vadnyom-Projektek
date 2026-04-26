@@ -18,6 +18,7 @@ namespace FairOrder
         public int StoreId { get; set; } = 1;
 
         public string StatusCode { get; set; }
+        public string OrderNumber { get; set; }
 
     }
 

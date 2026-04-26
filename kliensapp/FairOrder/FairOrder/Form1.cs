@@ -27,22 +27,7 @@ namespace FairOrder
             QuantityText.Text = "1";
             Load += async (s, e) => await ToltsdBeTermekeit();
         }
-        //private async Task ToltsdBeTermekeit()
-        //{
-        //    try
-        //    {
-        //        var url = $"{_baseUrl}/DesktopModules/Hotcakes/API/rest/v1/products?key={_apiKey}";
-        //        var json = await _client.GetStringAsync(url);
-        //        var result = JsonConvert.DeserializeObject<HotcakesProductResponse>(json);
-        //        _osszesTermek = result.Products ?? new List<Product>();
-
-        //        FrissitdAListat(SkuSearch.Text);
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show($"Hiba: {ex.Message}");
-        //    }
-        //}
+        
         private async Task ToltsdBeTermekeit()
         {
             try
@@ -107,6 +92,8 @@ namespace FairOrder
 
              OrderButton.Enabled = false;
 
+            await Task.Delay(1000);
+
             var allOrdersJson = await _client.GetStringAsync(
         $"{_baseUrl}/DesktopModules/Hotcakes/API/rest/v1/orders?key={_apiKey}");
             var allOrders = JsonConvert.DeserializeObject<dynamic>(allOrdersJson);
@@ -131,6 +118,7 @@ namespace FairOrder
                     IsPlaced = true,
                     TotalGrand = vegosszeg,
                     StatusCode = "09D7305D-BD95-48d2-A025-16ADC827582A",
+                    OrderNumber = nextOrderNumber,
                     BillingAddress = new BillingAddress
                     {
                         FirstName = "Teszt",
@@ -140,11 +128,7 @@ namespace FairOrder
 
                     Items = _kosar.Select(k => new OrderItem
                     {
-                        //ProductId = k.Bvin,
-                        //Quantity = k.Mennyiseg,
-                        //BasePricePerItem = k.SitePrice,
-                        //ProductName = k.ProductName,
-                        //ProductSku = k.Sku
+                       
                         ProductId = k.Bvin,
                         Quantity = k.Mennyiseg,
                         BasePricePerItem = k.SitePrice,
@@ -161,9 +145,7 @@ namespace FairOrder
                 var orderJson = JsonConvert.SerializeObject(orderRequest);
                 var orderContent = new StringContent(orderJson, Encoding.UTF8, "application/json");
 
-                //var orderResponse = await _client.PostAsync(
-                //    $"{_baseUrl}/DesktopModules/Hotcakes/API/rest/v1/orders?key={_apiKey}",
-                //    orderContent);
+                
                 var orderResponse = await _client.PostAsync(
                        $"{_baseUrl}/DesktopModules/Hotcakes/API/rest/v1/orders?key={_apiKey}&recalculateOrder=true",
                         orderContent);
@@ -174,7 +156,7 @@ namespace FairOrder
                 var orderResult = JsonConvert.DeserializeObject<dynamic>(orderResponseJson);
                 string bvin = orderResult.Content.bvin;
 
-                
+
                 MessageBox.Show("Rendelés sikeresen leadva!");
                 _kosar.Clear();
                 FrissitdAKosarat();
