@@ -50,6 +50,7 @@
             FullPriceText = new TextBox();
             panel1 = new Panel();
             DelCart = new Button();
+            ProductImagesPanel = new FlowLayoutPanel();
             panel1.SuspendLayout();
             SuspendLayout();
             // 
@@ -244,12 +245,21 @@
             DelCart.UseVisualStyleBackColor = true;
             DelCart.Click += DelCart_Click;
             // 
+            // ProductImagesPanel
+            // 
+            ProductImagesPanel.AutoScroll = true;
+            ProductImagesPanel.Location = new Point(245, 166);
+            ProductImagesPanel.Name = "ProductImagesPanel";
+            ProductImagesPanel.Size = new Size(250, 287);
+            ProductImagesPanel.TabIndex = 19;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.White;
             ClientSize = new Size(992, 481);
+            Controls.Add(ProductImagesPanel);
             Controls.Add(DelCart);
             Controls.Add(panel1);
             Controls.Add(FullPriceText);
@@ -301,5 +311,6 @@
         private TextBox FullPriceText;
         private Panel panel1;
         private Button DelCart;
+        private FlowLayoutPanel ProductImagesPanel;
     }
 }

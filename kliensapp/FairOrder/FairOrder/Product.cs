@@ -15,13 +15,7 @@ namespace FairOrder
         public bool IsAvailableForSale { get; set; }
 
     }
-    //public class Product
-    //{
-    //    public string Sku { get; set; }
-    //    public string ProductName { get; set; }
-    //}
-    //
-
+    
     public class HotcakesProductResponse
     {
         public HotcakesContent Content { get; set; }

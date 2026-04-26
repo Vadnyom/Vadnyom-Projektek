@@ -6,9 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Newtonsoft.Json;
-//using ReaLTaiizor.Controls;
-//using ReaLTaiizor.Enum.Poison;
-//using ReaLTaiizor.Manager;
+
 
 namespace FairOrder
 {
@@ -50,6 +48,8 @@ namespace FairOrder
                 _osszesTermek = result?.Content?.Products ?? new List<Product>();
 
                 FrissitdAListat(SkuSearch.Text);
+
+                await ToltsdBeKepesLista();
             }
             catch (Exception ex)
             {
@@ -270,6 +270,54 @@ namespace FairOrder
 
             _kosar.Remove(kivalasztott);
             FrissitdAKosarat();
+        }
+
+        private async Task ToltsdBeKepesLista()
+        {
+            ProductImagesPanel.Controls.Clear();
+
+            foreach (var termek in _osszesTermek.Take(5))
+            {
+                var kepUrl = $"{_baseUrl}/Portals/0/Hotcakes/Data/products/{termek.Bvin}/small/{termek.Sku}.jpg";
+
+                var kep = new PictureBox
+                {
+                    Width = 100,
+                    Height = 100,
+                    SizeMode = PictureBoxSizeMode.Zoom,
+                    Margin = new Padding(5)
+                };
+
+                try
+                {
+                    var kepBytes = await _client.GetByteArrayAsync(kepUrl);
+                    var ms = new System.IO.MemoryStream(kepBytes);
+                    kep.Image = Image.FromStream(ms);
+                }
+                catch (Exception ex)
+                {
+                    kep.BackColor = Color.LightGray;
+                    System.Diagnostics.Debug.WriteLine($"Kép betöltési hiba: {termek.Sku} - {ex.Message}");
+                }
+
+                var sku = new Label
+                {
+                    Text = termek.Sku,
+                    TextAlign = ContentAlignment.MiddleCenter,
+                    Width = 100
+                };
+
+                var card = new FlowLayoutPanel
+                {
+                    Width = 110,
+                    Height = 130,
+                    FlowDirection = FlowDirection.TopDown
+                };
+
+                card.Controls.Add(kep);
+                card.Controls.Add(sku);
+                ProductImagesPanel.Controls.Add(card);
+            }
         }
     }
 }
