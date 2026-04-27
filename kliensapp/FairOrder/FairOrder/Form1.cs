@@ -51,7 +51,21 @@ namespace FairOrder
             }
         }
 
-        private readonly FilterService _filterService = new FilterService(); //ez egy új class, amibe átkerült a FrissitdAListat egy része (és én unit testet csak erre a classra fogok írni
+
+        //private void FrissitdAListat(string szuroSku)
+        //{
+        //    var szurt = string.IsNullOrWhiteSpace(szuroSku)
+        //        ? _osszesTermek
+        //        : _osszesTermek
+        //            .Where(p => p.Sku.Contains(szuroSku, StringComparison.OrdinalIgnoreCase))
+        //            .ToList();
+
+        //    FilteredSku.DataSource = null;
+        //    FilteredSku.DataSource = szurt;
+        //    FilteredSku.DisplayMember = "Sku";
+        //}
+
+        private readonly FilterService _filterService = new FilterService(); //ez egy �j class, amibe �tker�lt a FrissitdAListat egy r�sze (�s �n unit testet csak erre a classra fogok �rni
         private void FrissitdAListat(string szuroSku)
         {
 
@@ -62,14 +76,15 @@ namespace FairOrder
             //        .Where(p => p.Sku.Contains(szuroSku, StringComparison.OrdinalIgnoreCase))
             //        .ToList();
 
-            //új: a szurt mostmár a FilterService classt hívja meg (oda került az eredeti szűrés)
+            //�j: a szurt mostm�r a FilterService classt h�vja meg (oda ker�lt az eredeti sz�r�s)
             var szurt = _filterService.FilterBySku(_osszesTermek, szuroSku);
 
-            //ez pedig változatlan
-            FilteredSku.DataSource = null;
-            FilteredSku.DataSource = szurt;
-            FilteredSku.DisplayMember = "Sku";
+            //ez pedig v�ltozatlan
+            //FilteredSku.DataSource = null;
+            //FilteredSku.DataSource = szurt;
+            //FilteredSku.DisplayMember = "Sku";
         }
+//>>>>>>> 6ce0ba6f16838452f57c4756f70a68792c9cdaa7
 
 
         private void Form1_Load(object sender, EventArgs e)
