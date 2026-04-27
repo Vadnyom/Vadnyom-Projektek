@@ -35,7 +35,6 @@
             User = new Button();
             OrderList = new ListBox();
             OrderButton = new Button();
-            FilteredSku = new ListBox();
             QuantityText = new TextBox();
             Add = new Button();
             Delete = new Button();
@@ -49,6 +48,7 @@
             VATText = new TextBox();
             FullPriceText = new TextBox();
             panel1 = new Panel();
+            KiemeltBeallButton = new Button();
             DelCart = new Button();
             ProductImagesPanel = new FlowLayoutPanel();
             panel1.SuspendLayout();
@@ -88,22 +88,16 @@
             // 
             // OrderButton
             // 
+            OrderButton.BackColor = Color.FromArgb(69, 91, 60);
+            OrderButton.FlatStyle = FlatStyle.Flat;
+            OrderButton.ForeColor = Color.White;
             OrderButton.Location = new Point(819, 424);
             OrderButton.Name = "OrderButton";
             OrderButton.Size = new Size(117, 29);
             OrderButton.TabIndex = 3;
             OrderButton.Text = "Megrendelés";
-            OrderButton.UseVisualStyleBackColor = true;
+            OrderButton.UseVisualStyleBackColor = false;
             OrderButton.Click += Order_Click;
-            // 
-            // FilteredSku
-            // 
-            FilteredSku.FormattingEnabled = true;
-            FilteredSku.Location = new Point(27, 166);
-            FilteredSku.Name = "FilteredSku";
-            FilteredSku.Size = new Size(389, 244);
-            FilteredSku.TabIndex = 4;
-            FilteredSku.SelectedIndexChanged += FilteredSku_SelectedIndexChanged;
             // 
             // QuantityText
             // 
@@ -148,6 +142,8 @@
             // 
             // AddProduct
             // 
+            AddProduct.FlatAppearance.BorderColor = Color.FromArgb(31, 54, 4);
+            AddProduct.FlatStyle = FlatStyle.Flat;
             AddProduct.Location = new Point(445, 282);
             AddProduct.Name = "AddProduct";
             AddProduct.Size = new Size(125, 29);
@@ -229,11 +225,22 @@
             // panel1
             // 
             panel1.BackgroundImage = (Image)resources.GetObject("panel1.BackgroundImage");
+            panel1.Controls.Add(KiemeltBeallButton);
             panel1.Controls.Add(User);
             panel1.Location = new Point(-1, -1);
             panel1.Name = "panel1";
             panel1.Size = new Size(993, 87);
             panel1.TabIndex = 17;
+            // 
+            // KiemeltBeallButton
+            // 
+            KiemeltBeallButton.Location = new Point(662, 28);
+            KiemeltBeallButton.Name = "KiemeltBeallButton";
+            KiemeltBeallButton.Size = new Size(158, 29);
+            KiemeltBeallButton.TabIndex = 2;
+            KiemeltBeallButton.Text = "Termékek beállítása";
+            KiemeltBeallButton.UseVisualStyleBackColor = true;
+            KiemeltBeallButton.Click += KiemeltBeallButton_Click;
             // 
             // DelCart
             // 
@@ -248,9 +255,10 @@
             // ProductImagesPanel
             // 
             ProductImagesPanel.AutoScroll = true;
-            ProductImagesPanel.Location = new Point(245, 166);
+            ProductImagesPanel.BorderStyle = BorderStyle.FixedSingle;
+            ProductImagesPanel.Location = new Point(12, 152);
             ProductImagesPanel.Name = "ProductImagesPanel";
-            ProductImagesPanel.Size = new Size(250, 287);
+            ProductImagesPanel.Size = new Size(417, 301);
             ProductImagesPanel.TabIndex = 19;
             // 
             // Form1
@@ -274,7 +282,6 @@
             Controls.Add(Delete);
             Controls.Add(Add);
             Controls.Add(QuantityText);
-            Controls.Add(FilteredSku);
             Controls.Add(OrderButton);
             Controls.Add(OrderList);
             Controls.Add(SkuSearch);
@@ -296,7 +303,6 @@
         private Button User;
         private ListBox OrderList;
         private Button OrderButton;
-        private ListBox FilteredSku;
         private TextBox QuantityText;
         private Button Add;
         private Button Delete;
@@ -312,5 +318,6 @@
         private Panel panel1;
         private Button DelCart;
         private FlowLayoutPanel ProductImagesPanel;
+        private Button KiemeltBeallButton;
     }
 }
