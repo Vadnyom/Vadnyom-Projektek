@@ -49,6 +49,8 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Components
                 if (string.IsNullOrWhiteSpace(category))
                     continue;
 
+                var imageUrl = $"{_baseUrl}/Portals/0/Hotcakes/Data/products/{product.Bvin}/small/{product.Sku}.jpg";
+
                 mapped.Add(new Item
                 {
                     ItemId = id++,
@@ -56,7 +58,7 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Components
                     ItemDescription = product.Sku,
                     Category = category,
                     Price = product.SitePrice,
-                    ImageUrl = "/Portals/0/Images/no-image.png",
+                    ImageUrl = imageUrl,
                     SortOrder = id,
                     IsActive = true
                 });
@@ -67,15 +69,18 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Components
 
         private string ResolveCategory(HotcakesProduct product)
         {
-            var text = (product.ProductName + " " + product.Sku).ToLowerInvariant();
+            if (product == null || string.IsNullOrWhiteSpace(product.Sku))
+                return null;
 
-            if (text.Contains("kabát") || text.Contains("kabat") || text.Contains("coat") || text.Contains("jacket"))
+            var sku = product.Sku.Trim().ToUpperInvariant();
+
+            if (sku.StartsWith("JACK"))
                 return "Coat";
 
-            if (text.Contains("nadrág") || text.Contains("nadrag") || text.Contains("pants") || text.Contains("trouser"))
+            if (sku.StartsWith("TROU"))
                 return "Pants";
 
-            if (text.Contains("bakancs") || text.Contains("boot") || text.Contains("boots"))
+            if (sku.StartsWith("BOOT"))
                 return "Boots";
 
             return null;

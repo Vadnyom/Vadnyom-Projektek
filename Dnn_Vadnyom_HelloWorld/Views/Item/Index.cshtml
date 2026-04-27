@@ -199,6 +199,19 @@
             <h2>Ellenőrzés</h2>
             <p class="bundle-subtitle">A kiválasztott termékek</p>
 
+            if (!Model.HasCompleteBundle)
+            {
+                <div class="bundle-warning-message">
+                    Nem jár kedvezmény, mert nem választottál mindhárom kategóriából egy terméket.
+                </div>
+            }
+            else
+            {
+                <div class="bundle-success-message">
+                    A 15% kedvezmény érvényesítve lett, mert mindhárom kategóriából választottál egy terméket.
+                </div>
+            }
+
             <div class="bundle-summary">
                 @if (Model.SelectedCoat != null)
                 {
