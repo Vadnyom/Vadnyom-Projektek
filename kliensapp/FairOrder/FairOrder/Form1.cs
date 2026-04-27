@@ -57,14 +57,21 @@ namespace FairOrder
             }
         }
 
+        private readonly FilterService _filterService = new FilterService(); //ez egy új class, amibe átkerült a FrissitdAListat egy része (és én unit testet csak erre a classra fogok írni
         private void FrissitdAListat(string szuroSku)
         {
-            var szurt = string.IsNullOrWhiteSpace(szuroSku)
-                ? _osszesTermek
-                : _osszesTermek
-                    .Where(p => p.Sku.Contains(szuroSku, StringComparison.OrdinalIgnoreCase))
-                    .ToList();
 
+            // eredeti code:
+            //var szurt = string.IsNullOrWhiteSpace(szuroSku)
+            //    ? _osszesTermek
+            //    : _osszesTermek
+            //        .Where(p => p.Sku.Contains(szuroSku, StringComparison.OrdinalIgnoreCase))
+            //        .ToList();
+
+            //új: a szurt mostmár a FilterService classt hívja meg (oda került az eredeti szûrés)
+            var szurt = _filterService.FilterBySku(_osszesTermek, szuroSku);
+
+            //ez pedig változatlan
             FilteredSku.DataSource = null;
             FilteredSku.DataSource = szurt;
             FilteredSku.DisplayMember = "Sku";
