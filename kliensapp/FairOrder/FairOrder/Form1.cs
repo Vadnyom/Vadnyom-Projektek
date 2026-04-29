@@ -22,6 +22,8 @@ namespace FairOrder
         private FlowLayoutPanel _kivalasztottKartya = null;
         private List<Product> _kiemeltTermekek = new List<Product>();
 
+        private int _kiemeltKartyakSzama = 6;
+
         public Form1()
         {
             InitializeComponent();
@@ -95,7 +97,18 @@ namespace FairOrder
         private void SkuSearch_TextChanged(object sender, EventArgs e)
         {
             //FrissitdAListat(SkuSearch.Text);
-            ToltsdBeKepesLista(SkuSearch.Text);
+            //ToltsdBeKepesLista(SkuSearch.Text);
+
+            string szuro = SkuSearch.Text.ToLower();
+
+            foreach (Control card in ProductImagesPanel.Controls)
+            {
+                if (card.Tag is Product termek)
+                {
+                    card.Visible = string.IsNullOrWhiteSpace(szuro) ||
+                                   termek.Sku.ToLower().Contains(szuro);
+                }
+            }
         }
 
         private async void Order_Click(object sender, EventArgs e)
@@ -386,10 +399,19 @@ namespace FairOrder
 
         private void KiemeltBeallButton_Click(object sender, EventArgs e)
         {
+            //var valaszto = new KiemeltTermekek(_osszesTermek);
+            //if (valaszto.ShowDialog() == DialogResult.OK)
+            //{
+            //    _kiemeltTermekek = valaszto.KivalasztottTermekek;
+            //    //await 
+            //    ToltsdBeKiemeltKartyak();
+            //}
+
             var valaszto = new KiemeltTermekek(_osszesTermek);
             if (valaszto.ShowDialog() == DialogResult.OK)
             {
                 _kiemeltTermekek = valaszto.KivalasztottTermekek;
+                _kiemeltKartyakSzama = valaszto.KivalasztottKartyakSzama;
                 //await 
                 ToltsdBeKiemeltKartyak();
             }
@@ -401,7 +423,7 @@ namespace FairOrder
             _kepStreamek.ForEach(ms => ms.Dispose());
             _kepStreamek.Clear();
 
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < _kiemeltKartyakSzama; i++)
             {
                 if (i < _kiemeltTermekek.Count)
                 {
