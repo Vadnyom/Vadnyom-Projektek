@@ -16,7 +16,7 @@ namespace FairOrder
         private List<Product> _osszesTermek;
         private List<Product> _kivalasztottak = new List<Product>();
 
-
+        public int KivalasztottKartyakSzama => (int)numericUpDown1.Value;
 
         public KiemeltTermekek(List<Product> osszesTermek)
         {
@@ -56,9 +56,9 @@ namespace FairOrder
         {
             if (KiemeltListBox.SelectedItem is not Product kivalasztott) return;
 
-            if (_kivalasztottak.Count >= 6)
+            if (_kivalasztottak.Count >= KivalasztottKartyakSzama)
             {
-                MessageBox.Show("Maximum 6 terméket lehet kiválasztani!");
+                MessageBox.Show($"Maximum {KivalasztottKartyakSzama} terméket lehet kiválasztani!");
                 return;
             }
 
