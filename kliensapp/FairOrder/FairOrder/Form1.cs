@@ -126,17 +126,17 @@ namespace FairOrder
 
             try
             {
-                //var vegosszeg = _kosar.Sum(k => k.SitePrice * k.Mennyiseg);
+                
                 var bruttoOsszeg = _kosar.Sum(k => k.SitePrice * k.Mennyiseg);
                 decimal nettoOsszeg = bruttoOsszeg / 1.27m;
                 decimal afa = bruttoOsszeg - nettoOsszeg;
-                // 1. Rendelés létrehozása
+                
                 var orderRequest = new OrderRequest
                 {
                     UserEmail = "vadnyom1@gmail.com",
                     UserID = "1",
                     IsPlaced = true,
-                    //TotalGrand = vegosszeg,
+                    
                     TotalGrand = bruttoOsszeg,
                     TotalOrderBeforeDiscounts = nettoOsszeg,
                     ItemsTax = afa,
@@ -173,7 +173,7 @@ namespace FairOrder
 
 
                 var orderResponse = await _client.PostAsync(
-                       $"{_baseUrl}/DesktopModules/Hotcakes/API/rest/v1/orders?key={_apiKey}&recalculateOrder=true",
+                       $"{_baseUrl}/DesktopModules/Hotcakes/API/rest/v1/orders?key={_apiKey}",
                         orderContent);
 
                 orderResponse.EnsureSuccessStatusCode();
@@ -226,33 +226,7 @@ namespace FairOrder
 
         private void AddProduct_Click(object sender, EventArgs e)
         {
-            //if (FilteredSku.SelectedItem is not Product kivalasztott)
-            //{
-            //    MessageBox.Show("Válassz ki egy terméket a listából.");
-            //    return;
-            //}
-
-            //if (!int.TryParse(QuantityText.Text, out int mennyiseg) || mennyiseg < 1)
-            //{
-            //    MessageBox.Show("Érvénytelen mennyiség.");
-            //    return;
-            //}
-            //var meglevo = _kosar.FirstOrDefault(k => k.Bvin == kivalasztott.Bvin);
-            //if (meglevo != null)
-            //{
-            //    meglevo.Mennyiseg += mennyiseg;
-            //}
-            //else
-            //{
-            //    _kosar.Add(new KosarTetel
-            //    {
-            //        Bvin = kivalasztott.Bvin,
-            //        Sku = kivalasztott.Sku,
-            //        ProductName = kivalasztott.ProductName,
-            //        SitePrice = kivalasztott.SitePrice,
-            //        Mennyiseg = mennyiseg
-            //    });
-            //}
+            
             if (_kivalasztottKartya?.Tag is not Product kivalasztott)
             {
                 MessageBox.Show("Válassz ki egy terméket!");
@@ -395,7 +369,6 @@ namespace FairOrder
             }
         }
 
-        //private FlowLayoutPanel _kivalasztottKartya = null;
 
         private void KartyaKivalasztva(FlowLayoutPanel kartya)
         {
@@ -428,7 +401,6 @@ namespace FairOrder
             _kepStreamek.ForEach(ms => ms.Dispose());
             _kepStreamek.Clear();
 
-            // Üres kártyák feltöltése ha kevesebb mint 6
             for (int i = 0; i < 6; i++)
             {
                 if (i < _kiemeltTermekek.Count)
@@ -498,7 +470,6 @@ namespace FairOrder
                 }
                 else
                 {
-                    // Üres kártya + ikon
                     var uresKartya = new FlowLayoutPanel
                     {
                         Width = 110,
