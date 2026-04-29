@@ -1,16 +1,6 @@
-﻿/*
-' Copyright (c) 2026 Vadnyom
-'  All rights reserved.
-' 
-' THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED
-' TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
-' THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF
-' CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-' DEALINGS IN THE SOFTWARE.
-' 
-*/
-
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using DotNetNuke.Data;
 using DotNetNuke.Framework;
 using Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Models;
@@ -24,11 +14,11 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Components
         void DeleteItem(Item t);
         IEnumerable<Item> GetItems(int moduleId);
         Item GetItem(int itemId, int moduleId);
-        void UpdateItem(Item t);
+        void UpdateItem(Item t);      
     }
 
     class ItemManager: ServiceLocator<IItemManager, ItemManager>, IItemManager
-    {
+    {       
         public void CreateItem(Item t)
         {
             using (IDataContext ctx = DataContext.Instance())

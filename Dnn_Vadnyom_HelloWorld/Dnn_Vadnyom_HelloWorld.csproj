@@ -51,6 +51,14 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\bin\DotNetNuke.Web.Mvc.dll</HintPath>
     </Reference>
+    <Reference Include="Hotcakes.Commerce, Version=3.9.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\Hotcakes.Commerce.dll</HintPath>
+    </Reference>
+    <Reference Include="Hotcakes.Commerce.Dnn, Version=3.9.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\bin\Hotcakes.Commerce.Dnn.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.ApplicationBlocks.Data, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\bin\Microsoft.ApplicationBlocks.Data.dll</HintPath>
@@ -109,6 +117,7 @@
     </Compile>
     <Compile Include="Components\FeatureController.cs" />
     <Compile Include="Components\HotcakesApiService.cs" />
+    <Compile Include="Components\HotcakesCartService.cs" />
     <Compile Include="Components\ItemManager.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Models\BundleViewModel.cs" />

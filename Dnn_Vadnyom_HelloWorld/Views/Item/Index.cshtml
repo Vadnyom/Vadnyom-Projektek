@@ -22,7 +22,6 @@
                 @Model.ErrorMessage
             </div>
         }
-
         @if (Model.CurrentStep == 0)
         {
             <div class="bundle-start-screen">
@@ -64,23 +63,34 @@
             <div class="bundle-product-grid">
                 @foreach (var item in Model.Coats)
                 {
-                    <div class="bundle-product-card selectable-card">
-                        <div class="bundle-card-select">
-                            <input type="radio"
-                                   name="SelectedCoatId"
-                                   value="@item.ItemId"
-                                   @(Model.SelectedCoatId == item.ItemId ? "checked=\"checked\"" : "") />
-                        </div>
+                    var inputId = "coat_" + item.ItemId;
 
-                        <div class="bundle-product-title">@item.ItemName</div>
+                    <div class="bundle-product-option">
+                        <input type="radio"
+                               id="@inputId"
+                               name="SelectedCoatId"
+                               value="@item.ItemId"
+                               class="bundle-radio-input"
+                               @(Model.SelectedCoatId == item.ItemId ? "checked=\"checked\"" : "") />
 
-                        <div class="bundle-product-image-wrapper">
-                            <img src="@item.ImageUrl" alt="@item.ItemName" class="bundle-product-image" />
-                        </div>
+                        <label for="@inputId" class="bundle-product-card selectable-card">
+                            <div class="bundle-card-select">
+                                <span class="bundle-radio-visual"></span>
+                            </div>
 
-                        <div class="bundle-product-footer">
-                            <div class="bundle-product-price">@item.Price.ToString("N0") Ft</div>
-                        </div>
+                            <div class="bundle-product-title">@item.ItemName</div>
+
+                            <div class="bundle-product-image-wrapper">
+                                <img src="@item.ImageUrl"
+                                     alt="@item.ItemName"
+                                     class="bundle-product-image"
+                                     onerror="this.onerror=null;this.src='/Portals/0/Images/no-image.png';" />
+                            </div>
+
+                            <div class="bundle-product-footer">
+                                <div class="bundle-product-price">@item.Price.ToString("N0") Ft</div>
+                            </div>
+                        </label>
                     </div>
                 }
             </div>
@@ -110,23 +120,34 @@
             <div class="bundle-product-grid">
                 @foreach (var item in Model.Pants)
                 {
-                    <div class="bundle-product-card selectable-card">
-                        <div class="bundle-card-select">
-                            <input type="radio"
-                                   name="SelectedPantsId"
-                                   value="@item.ItemId"
-                                   @(Model.SelectedPantsId == item.ItemId ? "checked=\"checked\"" : "") />
-                        </div>
+                    var inputId = "pants_" + item.ItemId;
 
-                        <div class="bundle-product-title">@item.ItemName</div>
+                    <div class="bundle-product-option">
+                        <input type="radio"
+                               id="@inputId"
+                               name="SelectedPantsId"
+                               value="@item.ItemId"
+                               class="bundle-radio-input"
+                               @(Model.SelectedPantsId == item.ItemId ? "checked=\"checked\"" : "") />
 
-                        <div class="bundle-product-image-wrapper">
-                            <img src="@item.ImageUrl" alt="@item.ItemName" class="bundle-product-image" />
-                        </div>
+                        <label for="@inputId" class="bundle-product-card selectable-card">
+                            <div class="bundle-card-select">
+                                <span class="bundle-radio-visual"></span>
+                            </div>
 
-                        <div class="bundle-product-footer">
-                            <div class="bundle-product-price">@item.Price.ToString("N0") Ft</div>
-                        </div>
+                            <div class="bundle-product-title">@item.ItemName</div>
+
+                            <div class="bundle-product-image-wrapper">
+                                <img src="@item.ImageUrl"
+                                     alt="@item.ItemName"
+                                     class="bundle-product-image"
+                                     onerror="this.onerror=null;this.src='/Portals/0/Images/no-image.png';" />
+                            </div>
+
+                            <div class="bundle-product-footer">
+                                <div class="bundle-product-price">@item.Price.ToString("N0") Ft</div>
+                            </div>
+                        </label>
                     </div>
                 }
             </div>
@@ -147,37 +168,38 @@
             <h2>Bakancs</h2>
             <p class="bundle-subtitle">Válassz ki egy bakancsot</p>
 
-            <div class="bundle-selected-box">
-                @if (Model.SelectedCoat != null)
-                {
-                    <div>Kabát: <strong>@Model.SelectedCoat.ItemName</strong></div>
-                }
-                @if (Model.SelectedPants != null)
-                {
-                    <div>Nadrág: <strong>@Model.SelectedPants.ItemName</strong></div>
-                }
-            </div>
 
             <div class="bundle-product-grid">
                 @foreach (var item in Model.Boots)
                 {
-                    <div class="bundle-product-card selectable-card">
-                        <div class="bundle-card-select">
-                            <input type="radio"
-                                   name="SelectedBootId"
-                                   value="@item.ItemId"
-                                   @(Model.SelectedBootId == item.ItemId ? "checked=\"checked\"" : "") />
-                        </div>
+                    var inputId = "boot_" + item.ItemId;
 
-                        <div class="bundle-product-title">@item.ItemName</div>
+                    <div class="bundle-product-option">
+                        <input type="radio"
+                               id="@inputId"
+                               name="SelectedBootId"
+                               value="@item.ItemId"
+                               class="bundle-radio-input"
+                               @(Model.SelectedBootId == item.ItemId ? "checked=\"checked\"" : "") />
 
-                        <div class="bundle-product-image-wrapper">
-                            <img src="@item.ImageUrl" alt="@item.ItemName" class="bundle-product-image" />
-                        </div>
+                        <label for="@inputId" class="bundle-product-card selectable-card">
+                            <div class="bundle-card-select">
+                                <span class="bundle-radio-visual"></span>
+                            </div>
 
-                        <div class="bundle-product-footer">
-                            <div class="bundle-product-price">@item.Price.ToString("N0") Ft</div>
-                        </div>
+                            <div class="bundle-product-title">@item.ItemName</div>
+
+                            <div class="bundle-product-image-wrapper">
+                                <img src="@item.ImageUrl"
+                                     alt="@item.ItemName"
+                                     class="bundle-product-image"
+                                     onerror="this.onerror=null;this.src='/Portals/0/Images/no-image.png';" />
+                            </div>
+
+                            <div class="bundle-product-footer">
+                                <div class="bundle-product-price">@item.Price.ToString("N0") Ft</div>
+                            </div>
+                        </label>
                     </div>
                 }
             </div>
@@ -254,8 +276,20 @@
             </div>
 
             <div class="bundle-nav">
-                <button type="submit" name="navigation" value="home" class="bundle-home-button">Vissza a kezdőképernyőre</button>
-                <button type="submit" name="navigation" value="prev" class="bundle-prev-button">Vissza</button>
+                <button type="submit"
+                        formaction="@Url.Action("AddToCart", "Item")"
+                        formmethod="post"
+                        class="bundle-next-button">
+                    Kosárba helyezés
+                </button>
+
+                <button type="submit" name="navigation" value="home" class="bundle-home-button">
+                    Vissza a kezdőképernyőre
+                </button>
+
+                <button type="submit" name="navigation" value="prev" class="bundle-prev-button">
+                    Vissza
+                </button>
             </div>
         }
     </form>

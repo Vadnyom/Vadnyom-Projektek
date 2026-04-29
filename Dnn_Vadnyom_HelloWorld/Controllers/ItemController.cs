@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
-{
+{   
     public class ItemController : DnnController
     {
         private readonly HotcakesApiService _apiService = new HotcakesApiService();
@@ -23,7 +23,7 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
             return View(model);
         }
 
-        [HttpPost]
+        [HttpPost]       
         public ActionResult Index(BundleViewModel postedModel, string navigation)
         {
             int nextStep = postedModel.CurrentStep;
@@ -141,16 +141,19 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
                 SelectedBootId = bootId,
 
                 Coats = items.Where(x => x.Category == "Coat" && x.IsActive)
-                             .OrderBy(x => x.SortOrder)
-                             .ToList(),
+             .OrderByDescending(x => x.Price)
+             .Take(9)
+             .ToList(),
 
                 Pants = items.Where(x => x.Category == "Pants" && x.IsActive)
-                             .OrderBy(x => x.SortOrder)
-                             .ToList(),
+             .OrderByDescending(x => x.Price)
+             .Take(9)
+             .ToList(),
 
                 Boots = items.Where(x => x.Category == "Boots" && x.IsActive)
-                             .OrderBy(x => x.SortOrder)
-                             .ToList(),
+             .OrderByDescending(x => x.Price)
+             .Take(9)
+             .ToList(),
 
                 SelectedCoat = items.FirstOrDefault(x => x.ItemId == coatId),
                 SelectedPants = items.FirstOrDefault(x => x.ItemId == pantsId),
@@ -178,6 +181,6 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
             }
 
             return model;
-        }
+        }        
     }
 }
