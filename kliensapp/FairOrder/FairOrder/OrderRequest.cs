@@ -28,13 +28,6 @@ namespace FairOrder
 
     public class OrderItem
     {
-        //public string ProductId { get; set; }
-        //public int Quantity { get; set; }
-        //public decimal BasePricePerItem { get; set; }
-        //public string ProductName { get; set; }
-        //public string ProductSku { get; set; }
-        //public int TaxSchedule { get; set; } = 2;
-        //public int ShipFromMode { get; set; } = 1;
         public string ProductId { get; set; }
         public int Quantity { get; set; }
         public decimal BasePricePerItem { get; set; }
@@ -57,28 +50,5 @@ namespace FairOrder
         public string CountryName { get; set; } = "Hungary";
     }
 
-
-    //public class OrderRequest
-    //{
-    //    public string UserEmail { get; set; }
-    //    public string UserID { get; set; }
-    //    public bool IsPlaced { get; set; } = true;
-    //    public BillingAddress BillingAddress { get; set; }
-    //}
-
-    //public class BillingAddress
-    //{
-    //    public string FirstName { get; set; }
-    //    public string LastName { get; set; }
-    //    public string Phone { get; set; }
-    //    public string CountryName { get; set; } = "Hungary";
-    //    public string CountryBvin { get; set; } = "ide_a_magyarország_bvin";
-    //}
-
-    //public class OrderItem
-    //{
-    //    public string ProductBvin { get; set; }
-    //    public int Quantity { get; set; }
-    //}
 
 }

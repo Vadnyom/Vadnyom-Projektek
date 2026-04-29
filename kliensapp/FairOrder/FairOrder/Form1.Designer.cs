@@ -77,6 +77,7 @@
             User.TabIndex = 1;
             User.Text = "Felhasználó";
             User.UseVisualStyleBackColor = true;
+            User.Visible = false;
             // 
             // OrderList
             // 
