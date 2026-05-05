@@ -15,6 +15,7 @@ namespace FairOrder
         private readonly HttpClient _client = new HttpClient();
         private readonly string _baseUrl = "http://20.123.45.215";
         private readonly string _apiKey = "1-ce7c4f35-5308-40ef-a54f-74ec9333e365";
+        private readonly string _kiemeltKategoriaId = "92be5c1c-cd74-4948-bf4e-f03016a4d9b9";
 
         private List<Product> _osszesTermek = new List<Product>();
         private List<KosarTetel> _kosar = new List<KosarTetel>();
@@ -42,10 +43,13 @@ namespace FairOrder
 
                 _osszesTermek = result?.Content?.Products ?? new List<Product>();
 
-                //FrissitdAListat(SkuSearch.Text);
 
-                //await ToltsdBeKepesLista();
                 await ToltsdBeKiemeltKartyak();
+                //var url = $"{_baseUrl}/DesktopModules/Hotcakes/API/rest/v1/products/forcategory/{_kiemeltKategoriaId}?key={_apiKey}";
+                //var json = await _client.GetStringAsync(url);
+                //var result = JsonConvert.DeserializeObject<HotcakesProductResponse>(json);
+                //_kiemeltTermekek = result?.Content?.Products ?? new List<Product>();
+                //await ToltsdBeKiemeltKartyak();
             }
             catch (Exception ex)
             {

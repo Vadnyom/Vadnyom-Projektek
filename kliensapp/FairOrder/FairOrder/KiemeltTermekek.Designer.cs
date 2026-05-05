@@ -34,6 +34,7 @@
             SelectedItems = new ListBox();
             button1 = new Button();
             button2 = new Button();
+            KiemeltNev = new TextBox();
             SuspendLayout();
             // 
             // KiemeltListBox
@@ -43,6 +44,7 @@
             KiemeltListBox.Name = "KiemeltListBox";
             KiemeltListBox.Size = new Size(310, 304);
             KiemeltListBox.TabIndex = 0;
+            KiemeltListBox.SelectedIndexChanged += KiemeltListBox_SelectedIndexChanged;
             // 
             // KiemeltFilter
             // 
@@ -89,11 +91,19 @@
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
+            // KiemeltNev
+            // 
+            KiemeltNev.Location = new Point(79, 398);
+            KiemeltNev.Name = "KiemeltNev";
+            KiemeltNev.Size = new Size(311, 27);
+            KiemeltNev.TabIndex = 6;
+            // 
             // KiemeltTermekek
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(783, 450);
+            Controls.Add(KiemeltNev);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(SelectedItems);
@@ -115,5 +125,6 @@
         private ListBox SelectedItems;
         private Button button1;
         private Button button2;
+        private TextBox KiemeltNev;
     }
 }

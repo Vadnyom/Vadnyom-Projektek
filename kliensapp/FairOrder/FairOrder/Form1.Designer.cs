@@ -71,6 +71,7 @@
             // 
             // User
             // 
+            User.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             User.Location = new Point(843, 28);
             User.Name = "User";
             User.Size = new Size(94, 29);
@@ -81,6 +82,7 @@
             // 
             // OrderList
             // 
+            OrderList.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             OrderList.FormattingEnabled = true;
             OrderList.Location = new Point(631, 121);
             OrderList.Name = "OrderList";
@@ -89,6 +91,7 @@
             // 
             // OrderButton
             // 
+            OrderButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             OrderButton.BackColor = Color.FromArgb(69, 91, 60);
             OrderButton.FlatStyle = FlatStyle.Flat;
             OrderButton.ForeColor = Color.White;
@@ -155,6 +158,7 @@
             // 
             // Cash
             // 
+            Cash.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             Cash.AutoSize = true;
             Cash.Location = new Point(631, 415);
             Cash.Name = "Cash";
@@ -166,6 +170,7 @@
             // 
             // Card
             // 
+            Card.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             Card.AutoSize = true;
             Card.Location = new Point(631, 445);
             Card.Name = "Card";
@@ -177,6 +182,7 @@
             // 
             // PriceLabel
             // 
+            PriceLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             PriceLabel.AutoSize = true;
             PriceLabel.Location = new Point(637, 291);
             PriceLabel.Name = "PriceLabel";
@@ -186,6 +192,7 @@
             // 
             // VATLabel
             // 
+            VATLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             VATLabel.AutoSize = true;
             VATLabel.Location = new Point(637, 334);
             VATLabel.Name = "VATLabel";
@@ -195,6 +202,7 @@
             // 
             // FullPriceLabel
             // 
+            FullPriceLabel.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             FullPriceLabel.AutoSize = true;
             FullPriceLabel.Location = new Point(637, 375);
             FullPriceLabel.Name = "FullPriceLabel";
@@ -204,6 +212,7 @@
             // 
             // PriceText
             // 
+            PriceText.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             PriceText.Location = new Point(811, 291);
             PriceText.Name = "PriceText";
             PriceText.Size = new Size(125, 27);
@@ -211,6 +220,7 @@
             // 
             // VATText
             // 
+            VATText.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             VATText.Location = new Point(811, 334);
             VATText.Name = "VATText";
             VATText.Size = new Size(125, 27);
@@ -218,6 +228,7 @@
             // 
             // FullPriceText
             // 
+            FullPriceText.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             FullPriceText.Location = new Point(811, 375);
             FullPriceText.Name = "FullPriceText";
             FullPriceText.Size = new Size(125, 27);
@@ -236,6 +247,7 @@
             // 
             // KiemeltBeallButton
             // 
+            KiemeltBeallButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             KiemeltBeallButton.Location = new Point(662, 28);
             KiemeltBeallButton.Name = "KiemeltBeallButton";
             KiemeltBeallButton.Size = new Size(158, 29);
@@ -246,6 +258,7 @@
             // 
             // DelCart
             // 
+            DelCart.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             DelCart.Location = new Point(942, 121);
             DelCart.Name = "DelCart";
             DelCart.Size = new Size(38, 29);
@@ -256,6 +269,7 @@
             // 
             // ProductImagesPanel
             // 
+            ProductImagesPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
             ProductImagesPanel.AutoScroll = true;
             ProductImagesPanel.BorderStyle = BorderStyle.FixedSingle;
             ProductImagesPanel.Location = new Point(12, 152);

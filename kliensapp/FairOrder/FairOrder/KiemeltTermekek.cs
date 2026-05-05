@@ -42,6 +42,7 @@ namespace FairOrder
             KiemeltListBox.DataSource = null;
             KiemeltListBox.DataSource = szurt;
             KiemeltListBox.DisplayMember = "Sku";
+         
         }
 
         private void OKButton_Click(object sender, EventArgs e)
@@ -84,6 +85,14 @@ namespace FairOrder
         private void numericUpDown1_ValueChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void KiemeltListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (KiemeltListBox.SelectedItem is Product kivalasztott)
+            {
+                KiemeltNev.Text = kivalasztott.ProductName;
+            }
         }
     }
 }
