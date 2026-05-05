@@ -18,6 +18,7 @@
     CONSTRAINT [PK_{objectQualifier}Dnn_Vadnyom_HelloWorld_Items]
         PRIMARY KEY CLUSTERED ([ItemId] ASC)
 )
+GO
 
 CREATE PROCEDURE {databaseOwner}[{objectQualifier}Dnn_Vadnyom_HelloWorld_UpsertItem]
     @ModuleId INT,
@@ -95,3 +96,4 @@ BEGIN
         );
     END
 END
+GO
