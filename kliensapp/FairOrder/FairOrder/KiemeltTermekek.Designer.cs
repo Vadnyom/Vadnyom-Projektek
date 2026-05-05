@@ -34,8 +34,6 @@
             SelectedItems = new ListBox();
             button1 = new Button();
             button2 = new Button();
-            numericUpDown1 = new NumericUpDown();
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             SuspendLayout();
             // 
             // KiemeltListBox
@@ -91,22 +89,11 @@
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
-            // numericUpDown1
-            // 
-            numericUpDown1.Location = new Point(490, 262);
-            numericUpDown1.Maximum = new decimal(new int[] { 30, 0, 0, 0 });
-            numericUpDown1.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(150, 27);
-            numericUpDown1.TabIndex = 6;
-            numericUpDown1.Value = new decimal(new int[] { 6, 0, 0, 0 });
-            // 
             // KiemeltTermekek
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(783, 450);
-            Controls.Add(numericUpDown1);
             Controls.Add(button2);
             Controls.Add(button1);
             Controls.Add(SelectedItems);
@@ -116,7 +103,6 @@
             Name = "KiemeltTermekek";
             Text = "KiemeltTermekek";
             Load += KiemeltTermekek_Load;
-            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -129,6 +115,5 @@
         private ListBox SelectedItems;
         private Button button1;
         private Button button2;
-        private NumericUpDown numericUpDown1;
     }
 }

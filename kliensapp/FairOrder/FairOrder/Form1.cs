@@ -86,7 +86,7 @@ namespace FairOrder
             //FilteredSku.DataSource = szurt;
             //FilteredSku.DisplayMember = "Sku";
         }
-//>>>>>>> 6ce0ba6f16838452f57c4756f70a68792c9cdaa7
+        //>>>>>>> 6ce0ba6f16838452f57c4756f70a68792c9cdaa7
 
 
         private void Form1_Load(object sender, EventArgs e)
@@ -139,17 +139,17 @@ namespace FairOrder
 
             try
             {
-                
+
                 var bruttoOsszeg = _kosar.Sum(k => k.SitePrice * k.Mennyiseg);
                 decimal nettoOsszeg = bruttoOsszeg / 1.27m;
                 decimal afa = bruttoOsszeg - nettoOsszeg;
-                
+
                 var orderRequest = new OrderRequest
                 {
                     UserEmail = "vadnyom1@gmail.com",
                     UserID = "1",
                     IsPlaced = true,
-                    
+
                     TotalGrand = bruttoOsszeg,
                     TotalOrderBeforeDiscounts = nettoOsszeg,
                     ItemsTax = afa,
@@ -239,7 +239,7 @@ namespace FairOrder
 
         private void AddProduct_Click(object sender, EventArgs e)
         {
-            
+
             if (_kivalasztottKartya?.Tag is not Product kivalasztott)
             {
                 MessageBox.Show("Válassz ki egy terméket!");
@@ -515,6 +515,11 @@ namespace FairOrder
                     ProductImagesPanel.Controls.Add(uresKartya);
                 }
             }
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

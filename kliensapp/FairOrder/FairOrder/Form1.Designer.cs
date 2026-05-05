@@ -232,6 +232,7 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(993, 87);
             panel1.TabIndex = 17;
+            panel1.Paint += panel1_Paint;
             // 
             // KiemeltBeallButton
             // 
