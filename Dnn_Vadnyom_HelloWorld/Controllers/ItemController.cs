@@ -9,10 +9,16 @@ using DotNetNuke.Entities.Users;
 using DotNetNuke.Framework.JavaScriptLibraries;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Hotcakes.Commerce.Extensions;
+using Hotcakes.Commerce;
+using Hotcakes.Commerce.Orders;
+using Hotcakes.Commerce.Dnn;
+using Hotcakes.Commerce.Catalog;
+
 
 
 namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
-{   
+{
     public class ItemController : DnnController
     {
         private readonly HotcakesApiService _apiService = new HotcakesApiService();
@@ -24,7 +30,43 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
             return View(model);
         }
 
-        [HttpPost]       
+        public ActionResult AddBundleNext()
+        {
+            var step = Session["BundleStep"] as int? ?? 1;
+
+            string sku = null;
+
+            if (step == 1)
+            {
+                sku = Session["BundleSku1"] as string;
+                Session["BundleStep"] = 2;
+            }
+            else if (step == 2)
+            {
+                sku = Session["BundleSku2"] as string;
+                Session["BundleStep"] = 3;
+            }
+            else if (step == 3)
+            {
+                sku = Session["BundleSku3"] as string;
+                Session["BundleStep"] = 4;
+            }
+            else
+            {
+                Session.Remove("BundleSku1");
+                Session.Remove("BundleSku2");
+                Session.Remove("BundleSku3");
+                Session.Remove("BundleStep");
+
+                return Redirect("/Felhasznalo-Bejelentkezes/Cart");
+            }
+
+            return Redirect("/Felhasznalo-Bejelentkezes/Cart?QuickAddSku="
+                + Server.UrlEncode(sku)
+                + "&QuickAddQty=1");
+        }
+
+        [HttpPost]
         public ActionResult Index(BundleViewModel postedModel, string navigation)
         {
             int nextStep = postedModel.CurrentStep;
@@ -118,6 +160,64 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
             return View(model);
         }
 
+        [HttpPost]
+        public ActionResult AddToCart(BundleViewModel postedModel)
+        {
+            var model = BuildModel(
+                4,
+                postedModel.SelectedCoatId,
+                postedModel.SelectedPantsId,
+                postedModel.SelectedBootId
+            );
+
+            if (model.SelectedCoat == null || model.SelectedPants == null || model.SelectedBoot == null)
+            {
+                model.ErrorMessage = "A kosárba helyezéshez mindhárom terméket ki kell választani.";
+                return View("Index", model);
+            }
+
+            var cartUrl = "/Felhasznalo-Bejelentkezes/Cart";
+
+            var coatUrl = cartUrl + "?QuickAddSku=" + Server.UrlEncode(model.SelectedCoat.Sku) + "&QuickAddQty=1";
+            var pantsUrl = cartUrl + "?QuickAddSku=" + Server.UrlEncode(model.SelectedPants.Sku) + "&QuickAddQty=1";
+            var bootUrl = cartUrl + "?QuickAddSku=" + Server.UrlEncode(model.SelectedBoot.Sku) + "&QuickAddQty=1";
+
+            var html = $@"
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset='utf-8' />
+    <title>Kosárba helyezés</title>
+</head>
+<body>
+    <p>Termékek kosárba helyezése folyamatban...</p>
+
+    <script>
+        async function addBundleItems() {{
+            const urls = [
+                '{coatUrl}',
+                '{pantsUrl}',
+                '{bootUrl}'
+            ];
+
+            for (const url of urls) {{
+                await fetch(url + '&_=' + new Date().getTime(), {{
+                    method: 'GET',
+                    credentials: 'same-origin'
+                }});
+            }}
+
+            window.location.href = '{cartUrl}';
+        }}
+
+        addBundleItems();
+    </script>
+</body>
+</html>";
+
+            return Content(html, "text/html");
+        }
+
         private BundleViewModel BuildModel(int step, int? coatId, int? pantsId, int? bootId)
         {
             List<Item> items;
@@ -182,6 +282,7 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
             }
 
             return model;
-        }        
+        }
+       
     }
 }
