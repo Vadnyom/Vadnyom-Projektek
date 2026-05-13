@@ -1,7 +1,7 @@
 ﻿@inherits DotNetNuke.Web.Mvc.Framework.DnnWebViewPage<Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Models.BundleViewModel>
 <link rel="stylesheet" href="/DesktopModules/MVC/Dnn_Vadnyom_HelloWorld/module.css" />
 
-<div class="bundle-builder">
+<div id="bundle-builder" class="bundle-builder">
     <h1>Egyéni csomag összeállítás</h1>
 
     <form id="bundleForm" method="post" action="@Url.Action("Index", "Item")">
@@ -25,7 +25,7 @@
         @if (Model.CurrentStep == 0)
         {
             <div class="bundle-start-screen">
-                <h2>AAAAAAAAAAAAAAAAAÁllítsd össze saját csomagodat!</h2>
+                <h2>Állítsd össze saját csomagodat!</h2>
 
                 <div class="bundle-start-text">
                     Válassz egy <strong>kabátot</strong>, egy <strong>nadrágot</strong> és egy <strong>bakancsot</strong>,
@@ -88,7 +88,7 @@
                             </div>
 
                             <div class="bundle-product-footer">
-                                <div class="bundle-product-price">@item.Price.ToString("N0") Ft</div>
+                                <div class="bundle-product-price">@item.Price.ToString("N0").Replace(",", " ") Ft</div>
                             </div>
                         </label>
                     </div>
@@ -145,7 +145,7 @@
                             </div>
 
                             <div class="bundle-product-footer">
-                                <div class="bundle-product-price">@item.Price.ToString("N0") Ft</div>
+                                <div class="bundle-product-price">@item.Price.ToString("N0").Replace(",", " ") Ft</div>
                             </div>
                         </label>
                     </div>
@@ -197,7 +197,7 @@
                             </div>
 
                             <div class="bundle-product-footer">
-                                <div class="bundle-product-price">@item.Price.ToString("N0") Ft</div>
+                                <div class="bundle-product-price">@item.Price.ToString("N0").Replace(",", " ") Ft</div>
                             </div>
                         </label>
                     </div>
@@ -261,17 +261,17 @@
 
                 <div class="bundle-summary-row">
                     <span>Eredeti ár:</span>
-                    <strong>@Model.OriginalTotal.ToString("N0") Ft</strong>
+                    <strong>@Model.OriginalTotal.ToString("N0").Replace(",", " ") Ft</strong>
                 </div>
 
                 <div class="bundle-summary-row">
                     <span>Kedvezmény:</span>
-                    <strong>@Model.DiscountAmount.ToString("N0") Ft</strong>
+                    <strong>@Model.DiscountAmount.ToString("N0").Replace(",", " ") Ft</strong>
                 </div>
 
                 <div class="bundle-summary-row bundle-summary-total">
                     <span>Fizetendő:</span>
-                    <strong>@Model.DiscountedTotal.ToString("N0") Ft</strong>
+                    <strong>@Model.DiscountedTotal.ToString("N0").Replace(",", " ") Ft</strong>
                 </div>
             </div>
 
@@ -282,6 +282,7 @@
                         class="bundle-next-button">
                     Kosárba helyezés
                 </button>
+
 
                 <button type="submit" name="navigation" value="home" class="bundle-home-button">
                     Vissza a kezdőképernyőre
@@ -294,3 +295,30 @@
         }
     </form>
 </div>
+
+@if (ViewBag.ScrollToBundle == true)
+{
+    <script type="text/javascript">
+        (function () {
+            function scrollToBundle() {
+                var el = document.getElementById("bundle-builder");
+                if (el) {
+                    var y = el.getBoundingClientRect().top + window.pageYOffset - 120;
+                    window.scrollTo(0, y);
+                }
+            }
+
+            if (document.readyState === "complete" || document.readyState === "interactive") {
+                setTimeout(scrollToBundle, 300);
+            } else {
+                document.addEventListener("DOMContentLoaded", function () {
+                    setTimeout(scrollToBundle, 300);
+                });
+            }
+
+            window.addEventListener("load", function () {
+                setTimeout(scrollToBundle, 300);
+            });
+        })();
+    </script>
+}

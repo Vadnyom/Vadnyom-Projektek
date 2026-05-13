@@ -27,44 +27,16 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
         public ActionResult Index(int step = 0, int? coatId = null, int? pantsId = null, int? bootId = null)
         {
             var model = BuildModel(step, coatId, pantsId, bootId);
+
+            if (TempData["BundleErrorMessage"] != null)
+            {
+                model.ErrorMessage = TempData["BundleErrorMessage"].ToString();
+            }
+
             return View(model);
         }
 
-        public ActionResult AddBundleNext()
-        {
-            var step = Session["BundleStep"] as int? ?? 1;
-
-            string sku = null;
-
-            if (step == 1)
-            {
-                sku = Session["BundleSku1"] as string;
-                Session["BundleStep"] = 2;
-            }
-            else if (step == 2)
-            {
-                sku = Session["BundleSku2"] as string;
-                Session["BundleStep"] = 3;
-            }
-            else if (step == 3)
-            {
-                sku = Session["BundleSku3"] as string;
-                Session["BundleStep"] = 4;
-            }
-            else
-            {
-                Session.Remove("BundleSku1");
-                Session.Remove("BundleSku2");
-                Session.Remove("BundleSku3");
-                Session.Remove("BundleStep");
-
-                return Redirect("/Felhasznalo-Bejelentkezes/Cart");
-            }
-
-            return Redirect("/Felhasznalo-Bejelentkezes/Cart?QuickAddSku="
-                + Server.UrlEncode(sku)
-                + "&QuickAddQty=1");
-        }
+        
 
         [HttpPost]
         public ActionResult Index(BundleViewModel postedModel, string navigation)
@@ -149,17 +121,19 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
             }
 
             var model = BuildModel(
-                nextStep,
-                postedModel.SelectedCoatId,
-                postedModel.SelectedPantsId,
-                postedModel.SelectedBootId
-            );
+    nextStep,
+    postedModel.SelectedCoatId,
+    postedModel.SelectedPantsId,
+    postedModel.SelectedBootId
+);
 
             model.ErrorMessage = errorMessage;
 
+            ViewBag.ScrollToBundle = true;
+
             return View(model);
         }
-
+        
         [HttpPost]
         public ActionResult AddToCart(BundleViewModel postedModel)
         {
@@ -176,7 +150,7 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
                 return View("Index", model);
             }
 
-            var cartUrl = "/Felhasznalo-Bejelentkezes/Cart";
+            var cartUrl = "/Kosar";
 
             var coatUrl = cartUrl + "?QuickAddSku=" + Server.UrlEncode(model.SelectedCoat.Sku) + "&QuickAddQty=1";
             var pantsUrl = cartUrl + "?QuickAddSku=" + Server.UrlEncode(model.SelectedPants.Sku) + "&QuickAddQty=1";
