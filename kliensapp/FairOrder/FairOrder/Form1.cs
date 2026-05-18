@@ -19,9 +19,12 @@ namespace FairOrder
 
         private List<Product> _osszesTermek = new List<Product>();
         private List<KosarTetel> _kosar = new List<KosarTetel>();
-        private List<System.IO.MemoryStream> _kepStreamek = new List<System.IO.MemoryStream>(); // ← ide
+        private List<System.IO.MemoryStream> _kepStreamek = new List<System.IO.MemoryStream>();
         private FlowLayoutPanel _kivalasztottKartya = null;
         private List<Product> _kiemeltTermekek = new List<Product>();
+
+        private string _bejelentkezettEmail = "vadnyom1@gmail.com";
+        private string _bejelentkezettUserId = "1";
 
         private int _kiemeltKartyakSzama = 6;
 
@@ -150,8 +153,8 @@ namespace FairOrder
 
                 var orderRequest = new OrderRequest
                 {
-                    UserEmail = "vadnyom1@gmail.com",
-                    UserID = "1",
+                    UserEmail = _bejelentkezettEmail,
+                    UserID = _bejelentkezettUserId,
                     IsPlaced = true,
 
                     TotalGrand = bruttoOsszeg,
@@ -524,6 +527,17 @@ namespace FairOrder
         private void panel1_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void User_Click(object sender, EventArgs e)
+        {
+            var form = new Bejelentkezes(_client, _baseUrl, _apiKey);
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                _bejelentkezettEmail = form.BejelentkezettEmail;
+                _bejelentkezettUserId = form.BejelentkezettUserId;
+                MessageBox.Show($"Bejelentkezve: {_bejelentkezettEmail}");
+            }
         }
     }
 }

@@ -48,6 +48,7 @@
             VATText = new TextBox();
             FullPriceText = new TextBox();
             panel1 = new Panel();
+            button1 = new Button();
             KiemeltBeallButton = new Button();
             DelCart = new Button();
             ProductImagesPanel = new FlowLayoutPanel();
@@ -72,13 +73,13 @@
             // User
             // 
             User.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            User.Location = new Point(843, 28);
+            User.Location = new Point(757, 28);
             User.Name = "User";
-            User.Size = new Size(94, 29);
+            User.Size = new Size(110, 29);
             User.TabIndex = 1;
-            User.Text = "Felhasználó";
+            User.Text = "Bejelentkezés";
             User.UseVisualStyleBackColor = true;
-            User.Visible = false;
+            User.Click += User_Click;
             // 
             // OrderList
             // 
@@ -237,6 +238,7 @@
             // panel1
             // 
             panel1.BackgroundImage = (Image)resources.GetObject("panel1.BackgroundImage");
+            panel1.Controls.Add(button1);
             panel1.Controls.Add(KiemeltBeallButton);
             panel1.Controls.Add(User);
             panel1.Location = new Point(-1, -1);
@@ -245,10 +247,21 @@
             panel1.TabIndex = 17;
             panel1.Paint += panel1_Paint;
             // 
+            // button1
+            // 
+            button1.Anchor = AnchorStyles.Top | AnchorStyles.Right;
+            button1.Location = new Point(873, 28);
+            button1.Name = "button1";
+            button1.Size = new Size(108, 29);
+            button1.TabIndex = 3;
+            button1.Text = "Regisztráció";
+            button1.UseVisualStyleBackColor = true;
+            button1.Visible = false;
+            // 
             // KiemeltBeallButton
             // 
             KiemeltBeallButton.Anchor = AnchorStyles.Top | AnchorStyles.Right;
-            KiemeltBeallButton.Location = new Point(662, 28);
+            KiemeltBeallButton.Location = new Point(593, 28);
             KiemeltBeallButton.Name = "KiemeltBeallButton";
             KiemeltBeallButton.Size = new Size(158, 29);
             KiemeltBeallButton.TabIndex = 2;
@@ -335,5 +348,6 @@
         private Button DelCart;
         private FlowLayoutPanel ProductImagesPanel;
         private Button KiemeltBeallButton;
+        private Button button1;
     }
 }
