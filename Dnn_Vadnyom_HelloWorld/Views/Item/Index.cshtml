@@ -3,6 +3,9 @@
 
 <div id="bundle-builder" class="bundle-builder">
     <h1>Egyéni csomag összeállítás</h1>
+    <a href="@Url.Action("DebugCartLineTotals", "Item")" target="_blank">
+        DebugCartLineTotals
+    </a>
 
     <form id="bundleForm" method="post" action="@Url.Action("Index", "Item")">
         <input type="hidden" name="CurrentStep" value="@Model.CurrentStep" />
@@ -321,4 +324,5 @@
             });
         })();
     </script>
+
 }
