@@ -16,7 +16,7 @@ namespace FairOrder
         private List<Product> _osszesTermek;
         private List<Product> _kivalasztottak = new List<Product>();
 
-        public int KivalasztottKartyakSzama => (int)numericUpDown1.Value;
+        public int KivalasztottKartyakSzama => _kivalasztottak.Count;
 
         public KiemeltTermekek(List<Product> osszesTermek)
         {
@@ -42,11 +42,12 @@ namespace FairOrder
             KiemeltListBox.DataSource = null;
             KiemeltListBox.DataSource = szurt;
             KiemeltListBox.DisplayMember = "Sku";
+         
         }
 
         private void OKButton_Click(object sender, EventArgs e)
         {
-           
+
             KivalasztottTermekek = _kivalasztottak;
             DialogResult = DialogResult.OK;
             Close();
@@ -56,11 +57,6 @@ namespace FairOrder
         {
             if (KiemeltListBox.SelectedItem is not Product kivalasztott) return;
 
-            if (_kivalasztottak.Count >= KivalasztottKartyakSzama)
-            {
-                MessageBox.Show($"Maximum {KivalasztottKartyakSzama} terméket lehet kiválasztani!");
-                return;
-            }
 
             if (_kivalasztottak.Any(k => k.Bvin == kivalasztott.Bvin))
             {
@@ -84,6 +80,19 @@ namespace FairOrder
             SelectedItems.DataSource = null;
             SelectedItems.DataSource = _kivalasztottak.ToList();
             SelectedItems.DisplayMember = "Sku";
+        }
+
+        private void numericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void KiemeltListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (KiemeltListBox.SelectedItem is Product kivalasztott)
+            {
+                KiemeltNev.Text = kivalasztott.ProductName;
+            }
         }
     }
 }
