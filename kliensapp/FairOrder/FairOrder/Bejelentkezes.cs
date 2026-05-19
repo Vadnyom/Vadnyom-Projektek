@@ -50,7 +50,7 @@ namespace FairOrder
 
             try
             {
-                var url = $"{_baseUrl}/DesktopModules/Hotcakes/API/rest/v1/customeraccounts/byemail/{BejelentkezettEmail}?key={_apiKey}";
+                var url = $"{_baseUrl}/DesktopModules/Hotcakes/API/rest/v1/customeraccounts/FindByEmail?key={_apiKey}&email={BejelentkezettEmail}";
                 var json = await _client.GetStringAsync(url);
                 var result = JsonConvert.DeserializeObject<dynamic>(json);
 
@@ -59,6 +59,14 @@ namespace FairOrder
                     BejelentkezettVezeteknev = (string)result.Content.LastName ?? "";
                     BejelentkezettKeresztnev = (string)result.Content.FirstName ?? "";
                     BejelentkezettUserId = (string)result.Content.Bvin ?? "1";
+                }
+                else
+                {
+                    BejelentkezettEmail = "vadnyom1@gmail.com";
+                    BejelentkezettVezeteknev = "Felhasználó";
+                    BejelentkezettKeresztnev = "Teszt";
+                    BejelentkezettUserId = "1";
+                    MessageBox.Show("Ez az email cím nem található.", "Figyelmeztetés", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
             catch { }

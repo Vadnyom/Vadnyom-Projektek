@@ -25,6 +25,8 @@ namespace FairOrder
 
         private string _bejelentkezettEmail = "vadnyom1@gmail.com";
         private string _bejelentkezettUserId = "1";
+        private string _bejelentkezettVezeteknev = "Felhasználó";
+        private string _bejelentkezettKeresztnev = "Teszt";
 
         private int _kiemeltKartyakSzama = 6;
 
@@ -165,8 +167,8 @@ namespace FairOrder
                     OrderNumber = nextOrderNumber,
                     BillingAddress = new BillingAddress
                     {
-                        FirstName = "Teszt",
-                        LastName = "Felhasználó",
+                        FirstName = _bejelentkezettKeresztnev,
+                        LastName = _bejelentkezettVezeteknev,
                         CountryName = "Hungary"
                     },
 
@@ -229,6 +231,10 @@ namespace FairOrder
             }
             _kosar.Clear();
             FrissitdAKosarat();
+            _bejelentkezettEmail = "vadnyom1@gmail.com";
+            _bejelentkezettVezeteknev = "Felhasználó";
+            _bejelentkezettKeresztnev = "Teszt";
+            _bejelentkezettUserId = "1";
         }
 
 
@@ -535,8 +541,14 @@ namespace FairOrder
             if (form.ShowDialog() == DialogResult.OK)
             {
                 _bejelentkezettEmail = form.BejelentkezettEmail;
+                _bejelentkezettVezeteknev = form.BejelentkezettVezeteknev;
+                _bejelentkezettKeresztnev = form.BejelentkezettKeresztnev;
                 _bejelentkezettUserId = form.BejelentkezettUserId;
-                MessageBox.Show($"Bejelentkezve: {_bejelentkezettEmail}");
+
+                if (!string.IsNullOrEmpty(form.BejelentkezettVezeteknev))
+                {
+                    MessageBox.Show($"Bejelentkezve: {_bejelentkezettEmail}");
+                }
             }
         }
     }
