@@ -25,7 +25,6 @@
                 @Model.ErrorMessage
             </div>
         }
-
         @if (Model.CurrentStep == 0)
         {
             <div class="bundle-start-screen">
@@ -69,7 +68,7 @@
                 {
                     var inputId = "coat_" + item.ItemId;
 
-                    <div class="bundle-product-item">
+                    <div class="bundle-product-option">
                         <input type="radio"
                                id="@inputId"
                                name="SelectedCoatId"
@@ -85,9 +84,14 @@
                             <div class="bundle-product-title">@item.ItemName</div>
 
                             <div class="bundle-product-image-wrapper">
+                                <img src="@item.ImageUrl"
+                                     alt="@item.ItemName"
+                                     class="bundle-product-image"
+                                     onerror="this.onerror=null;this.src='/Portals/0/Images/no-image.png';" />
                             </div>
 
                             <div class="bundle-product-footer">
+                                <div class="bundle-product-price">@item.Price.ToString("N0").Replace(",", " ") Ft</div>
                             </div>
                         </label>
                     </div>
@@ -121,7 +125,7 @@
                 {
                     var inputId = "pants_" + item.ItemId;
 
-                    <div class="bundle-product-item">
+                    <div class="bundle-product-option">
                         <input type="radio"
                                id="@inputId"
                                name="SelectedPantsId"
@@ -137,9 +141,14 @@
                             <div class="bundle-product-title">@item.ItemName</div>
 
                             <div class="bundle-product-image-wrapper">
+                                <img src="@item.ImageUrl"
+                                     alt="@item.ItemName"
+                                     class="bundle-product-image"
+                                     onerror="this.onerror=null;this.src='/Portals/0/Images/no-image.png';" />
                             </div>
 
                             <div class="bundle-product-footer">
+                                <div class="bundle-product-price">@item.Price.ToString("N0").Replace(",", " ") Ft</div>
                             </div>
                         </label>
                     </div>
@@ -153,6 +162,7 @@
                 <button type="submit" name="navigation" value="next" class="bundle-next-button">Tovább</button>
             </div>
         }
+
         @if (Model.CurrentStep == 3)
         {
             <input type="hidden" name="SelectedCoatId" value="@(Model.SelectedCoatId.HasValue ? Model.SelectedCoatId.ToString() : "")" />
@@ -161,23 +171,13 @@
             <h2>Bakancs</h2>
             <p class="bundle-subtitle">Válassz ki egy bakancsot</p>
 
-            <div class="bundle-selected-box">
-                @if (Model.SelectedCoat != null)
-                {
-                    <div>Kabát: <strong>@Model.SelectedCoat.ItemName</strong></div>
-                }
-                @if (Model.SelectedPants != null)
-                {
-                    <div>Nadrág: <strong>@Model.SelectedPants.ItemName</strong></div>
-                }
-            </div>
 
             <div class="bundle-product-grid">
                 @foreach (var item in Model.Boots)
                 {
                     var inputId = "boot_" + item.ItemId;
 
-                    <div class="bundle-product-item">
+                    <div class="bundle-product-option">
                         <input type="radio"
                                id="@inputId"
                                name="SelectedBootId"
@@ -193,9 +193,14 @@
                             <div class="bundle-product-title">@item.ItemName</div>
 
                             <div class="bundle-product-image-wrapper">
+                                <img src="@item.ImageUrl"
+                                     alt="@item.ItemName"
+                                     class="bundle-product-image"
+                                     onerror="this.onerror=null;this.src='/Portals/0/Images/no-image.png';" />
                             </div>
 
                             <div class="bundle-product-footer">
+                                <div class="bundle-product-price">@item.Price.ToString("N0").Replace(",", " ") Ft</div>
                             </div>
                         </label>
                     </div>
@@ -259,23 +264,36 @@
 
                 <div class="bundle-summary-row">
                     <span>Eredeti ár:</span>
-                    <strong>@Model.OriginalTotal Ft</strong>
+                    <strong>@Model.OriginalTotal.ToString("N0").Replace(",", " ") Ft</strong>
                 </div>
 
                 <div class="bundle-summary-row">
                     <span>Kedvezmény:</span>
-                    <strong>@Model.DiscountAmount Ft</strong>
+                    <strong>@Model.DiscountAmount.ToString("N0").Replace(",", " ") Ft</strong>
                 </div>
 
                 <div class="bundle-summary-row bundle-summary-total">
                     <span>Fizetendő:</span>
-                    <strong>@Model.DiscountedTotal Ft</strong>
+                    <strong>@Model.DiscountedTotal.ToString("N0").Replace(",", " ") Ft</strong>
                 </div>
             </div>
 
             <div class="bundle-nav">
-                <button type="submit" name="navigation" value="prev" class="bundle-prev-button">Vissza</button>
-                <button type="submit" formaction="@Url.Action("AddToCart", "Item")" class="bundle-next-button">Kosárba</button>
+                <button type="submit"
+                        formaction="@Url.Action("AddToCart", "Item")"
+                        formmethod="post"
+                        class="bundle-next-button">
+                    Kosárba helyezés
+                </button>
+
+
+                <button type="submit" name="navigation" value="home" class="bundle-home-button">
+                    Vissza a kezdőképernyőre
+                </button>
+
+                <button type="submit" name="navigation" value="prev" class="bundle-prev-button">
+                    Vissza
+                </button>
             </div>
         }
     </form>
@@ -308,3 +326,5 @@
     </script>
 
 }
+
+

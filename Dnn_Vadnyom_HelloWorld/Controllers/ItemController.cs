@@ -18,13 +18,81 @@ using System.Web;
 using Hotcakes.Commerce.Marketing;
 
 
+
 namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
 {
     public class ItemController : DnnController
     {
         private readonly HotcakesApiService _apiService = new HotcakesApiService();
-
         [HttpGet]
+        public ActionResult DebugCartLineTotals()
+        {
+            try
+            {
+                var hccApp = Hotcakes.Commerce.HotcakesApplication.Current;
+                var cart = hccApp.OrderServices.CurrentShoppingCart();
+
+                if (cart == null)
+                {
+                    return Content("cart == null", "text/plain");
+                }
+
+                if (cart.Items == null)
+                {
+                    return Content("cart.Items == null", "text/plain");
+                }
+
+                if (cart.Items.Count == 0)
+                {
+                    return Content("A kosár üres.", "text/plain");
+                }
+
+                var lines = new List<string>();
+
+                lines.Add("DEBUG CART LINE TOTALS");
+                lines.Add("Kosársorok száma: " + cart.Items.Count);
+                lines.Add("");
+
+                foreach (var item in cart.Items)
+                {
+                    lines.Add("SKU: " + item.ProductSku);
+                    lines.Add("Name: " + item.ProductName);
+                    lines.Add("BasePricePerItem: " + item.BasePricePerItem);
+                    lines.Add("AdjustedPricePerItem: " + item.AdjustedPricePerItem);
+                    lines.Add("Quantity: " + item.Quantity);
+                    lines.Add("LineTotal: " + item.LineTotal);
+                    lines.Add("LineTotalWithDiscounts: " + item.LineTotalWithDiscounts);
+                    lines.Add("LineTotalWithoutDiscounts: " + item.LineTotalWithoutDiscounts);
+                    lines.Add("TotalDiscounts(): " + item.TotalDiscounts());
+
+                    if (item.DiscountDetails != null)
+                    {
+                        lines.Add("DiscountDetails.Count: " + item.DiscountDetails.Count);
+
+                        foreach (var d in item.DiscountDetails)
+                        {
+                            lines.Add("Discount Description: " + d.Description);
+                            lines.Add("Discount Amount: " + d.Amount);
+                            lines.Add("Discount Type: " + d.DiscountType);
+                            lines.Add("PromotionId: " + d.PromotionId);
+                            lines.Add("ActionId: " + d.ActionId);
+                        }
+                    }
+                    else
+                    {
+                        lines.Add("DiscountDetails: null");
+                    }
+
+                    lines.Add("-------------------------");
+                }
+
+                return Content(string.Join("\r\n", lines), "text/plain");
+            }
+            catch (Exception ex)
+            {
+                return Content("DebugCartLineTotals hiba: " + ex.ToString(), "text/plain");
+            }
+        }
         public ActionResult Index(int step = 0, int? coatId = null, int? pantsId = null, int? bootId = null)
         {
             var model = BuildModel(step, coatId, pantsId, bootId);
@@ -37,41 +105,53 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
             return View(model);
         }
 
-
         public ActionResult FinalizeBundle()
         {
             var cartUrl = "/Kosar";
+
             try
             {
                 var hccApp = Hotcakes.Commerce.HotcakesApplication.Current;
                 var cart = hccApp.OrderServices.CurrentShoppingCart();
+
                 var bundleGroupId = Session["PendingBundleGroupId"] as string;
                 var skuList = Session["PendingBundleSkus"] as string[];
+
                 if (string.IsNullOrWhiteSpace(bundleGroupId) || skuList == null || skuList.Length != 3)
                 {
                     return Redirect(cartUrl);
                 }
+
                 foreach (var item in cart.Items)
                 {
                     var sku = GetLineItemSku(item);
-                    if (string.IsNullOrWhiteSpace(sku)) continue;
-                    if (!skuList.Contains(sku, StringComparer.OrdinalIgnoreCase)) continue;
+
+                    if (string.IsNullOrWhiteSpace(sku))
+                        continue;
+
+                    if (!skuList.Contains(sku, StringComparer.OrdinalIgnoreCase))
+                        continue;
+
                     var devId = "VadnyomBundleModule";
+
                     item.CustomPropertySet(devId, "IsBundleItem", "true");
                     item.CustomPropertySet(devId, "BundleGroupId", bundleGroupId);
                     item.CustomPropertySet(devId, "BundleDiscountPercent", "15");
                     item.CustomPropertySet(devId, "BundleSource", "VadnyomBundleModule");
+
                     TryPrefixBundleName(item);
                     ApplyBundleLineDiscount(item, 0.15m);
                 }
 
+
                 hccApp.OrderServices.Orders.Update(cart, true);
+
 
                 Session.Remove("PendingBundleGroupId");
                 Session.Remove("PendingBundleSkus");
+
                 return Redirect(cartUrl);
             }
-
             catch (Exception ex)
             {
                 return Content("FinalizeBundle hiba: " + ex.Message);
@@ -79,40 +159,80 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
         }
 
         private const string BundleDevId = "VadnyomBundleModule";
+
         private bool IsBundleItem(object lineItem)
         {
-            if (lineItem == null) return false;
-            var method = lineItem.GetType().GetMethod("CustomPropertyGet", new[] { typeof(string), typeof(string) });
-            if (method == null) return false; var value = method.Invoke(lineItem, new object[] { BundleDevId, "IsBundleItem" });
+            if (lineItem == null)
+                return false;
+
+
+
+            var method = lineItem.GetType().GetMethod("CustomPropertyGet", new[]
+            {
+        typeof(string),
+        typeof(string)
+    });
+
+            if (method == null)
+                return false;
+
+            var value = method.Invoke(lineItem, new object[]
+            {
+        BundleDevId,
+        "IsBundleItem"
+            });
+
             return value != null && value.ToString().Equals("true", StringComparison.OrdinalIgnoreCase);
         }
+
         private string GetBundleGroupId(object lineItem)
         {
-            if (lineItem == null) return null;
-            var method = lineItem.GetType().GetMethod("CustomPropertyGet", new[] { typeof(string), typeof(string) });
-            if (method == null) return null;
-            var value = method.Invoke(lineItem, new object[] { BundleDevId, "BundleGroupId" });
+            if (lineItem == null)
+                return null;
+
+            var method = lineItem.GetType().GetMethod("CustomPropertyGet", new[]
+            {
+        typeof(string),
+        typeof(string)
+    });
+
+            if (method == null)
+                return null;
+
+            var value = method.Invoke(lineItem, new object[]
+            {
+        BundleDevId,
+        "BundleGroupId"
+            });
+
             return value == null ? null : value.ToString();
         }
-
         public ActionResult RemoveBundle(string groupId)
         {
             var cartUrl = "/Kosar";
+
             if (string.IsNullOrWhiteSpace(groupId))
             {
                 return Redirect(cartUrl);
             }
+
             try
             {
                 var hccApp = Hotcakes.Commerce.HotcakesApplication.Current;
                 var cart = hccApp.OrderServices.CurrentShoppingCart();
-                var itemsToRemove = cart.Items.Where(x => IsBundleItem(x) && GetBundleGroupId(x) == groupId).ToList();
+
+                var itemsToRemove = cart.Items
+                    .Where(x => IsBundleItem(x) && GetBundleGroupId(x) == groupId)
+                    .ToList();
+
                 foreach (var item in itemsToRemove)
                 {
                     cart.Items.Remove(item);
                 }
+
                 hccApp.OrderServices.Orders.Update(cart, true);
                 hccApp.CalculateOrderAndSave(cart);
+
                 return Redirect(cartUrl);
             }
             catch (Exception ex)
@@ -121,6 +241,8 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
             }
         }
 
+
+        [HttpPost]
         public ActionResult Index(BundleViewModel postedModel, string navigation)
         {
             int nextStep = postedModel.CurrentStep;
@@ -232,6 +354,16 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
                 return View("Index", model);
             }
 
+            //var context = Hotcakes.Commerce.HccRequestContext.Current;
+            //var hccApp = Hotcakes.Commerce.HotcakesApplication.Current;
+            //var cart = hccApp.OrderServices.CurrentShoppingCart();
+
+
+
+            //foreach (var item in cart.Items)
+            //{
+            //    item.
+            //}
             var bundleGroupId = "BND-" + Guid.NewGuid().ToString("N");
 
             Session["PendingBundleGroupId"] = bundleGroupId;
@@ -241,6 +373,8 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
         model.SelectedPants.Sku,
         model.SelectedBoot.Sku
     };
+
+
 
             var cartUrl = "/Kosar";
 
@@ -286,20 +420,38 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
             return Content(html, "text/html");
         }
 
-        private string GetLineItemSku(object lineItem) 
+        private string GetLineItemSku(object lineItem)
         {
-            if (lineItem == null) return null; 
-            var type = lineItem.GetType(); 
-            var possibleNames = new[] { "ProductSku", "Sku", "ProductSKU", "SKU" }; 
-            foreach (var name in possibleNames) 
+            if (lineItem == null)
+                return null;
+
+            var type = lineItem.GetType();
+
+
+            var possibleNames = new[]
             {
-                var prop = type.GetProperty(name); 
-                if (prop == null) continue; 
-                var value = prop.GetValue(lineItem, null); 
-                if (value != null) return value.ToString(); 
+        "ProductSku",
+        "Sku",
+        "ProductSKU",
+        "SKU"
+    };
+
+            foreach (var name in possibleNames)
+            {
+                var prop = type.GetProperty(name);
+
+                if (prop == null)
+                    continue;
+
+                var value = prop.GetValue(lineItem, null);
+
+                if (value != null)
+                    return value.ToString();
             }
-            return null; 
+
+            return null;
         }
+
         private void ApplyBundleLineDiscount(LineItem item, decimal discountPercent)
         {
             if (item == null)
@@ -324,25 +476,37 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
                 item.DiscountDetails.Clear();
             }
         }
-        private void TryPrefixBundleName(object lineItem) 
+        private void TryPrefixBundleName(object lineItem)
         {
-            if (lineItem == null) return; 
-            var type = lineItem.GetType(); 
-            var possibleNameProperties = new[] 
+            if (lineItem == null)
+                return;
+
+            var type = lineItem.GetType();
+
+            var possibleNameProperties = new[]
             {
-                "ProductName", 
-                "ProductShortDescription", 
-                "ProductDescription" 
-            }; 
-            
-            foreach (var name in possibleNameProperties) 
+        "ProductName",
+        "ProductShortDescription",
+        "ProductDescription"
+    };
+
+            foreach (var name in possibleNameProperties)
             {
-                var prop = type.GetProperty(name); 
-                if (prop == null || !prop.CanRead || !prop.CanWrite) continue; 
-                var currentValue = prop.GetValue(lineItem, null) as string; 
-                if (string.IsNullOrWhiteSpace(currentValue)) continue; 
-                if (currentValue.StartsWith("Csomag:")) return; 
-                prop.SetValue(lineItem, "Csomag: " + currentValue, null); return; 
+                var prop = type.GetProperty(name);
+
+                if (prop == null || !prop.CanRead || !prop.CanWrite)
+                    continue;
+
+                var currentValue = prop.GetValue(lineItem, null) as string;
+
+                if (string.IsNullOrWhiteSpace(currentValue))
+                    continue;
+
+                if (currentValue.StartsWith("Csomag:"))
+                    return;
+
+                prop.SetValue(lineItem, "Csomag: " + currentValue, null);
+                return;
             }
         }
 
@@ -408,9 +572,9 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
                 model.DiscountAmount = 0;
                 model.DiscountedTotal = model.OriginalTotal;
             }
+
             return model;
         }
 
     }
 }
-
