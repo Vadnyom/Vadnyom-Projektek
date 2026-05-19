@@ -67,6 +67,9 @@
             <div class="bundle-product-grid">
                 @foreach (var item in Model.Coats)
                 {
+                    var inputId = "coat_" + item.ItemId;
+
+                    <div class="bundle-product-item">
                         <input type="radio"
                                id="@inputId"
                                name="SelectedCoatId"
@@ -116,6 +119,9 @@
             <div class="bundle-product-grid">
                 @foreach (var item in Model.Pants)
                 {
+                    var inputId = "pants_" + item.ItemId;
+
+                    <div class="bundle-product-item">
                         <input type="radio"
                                id="@inputId"
                                name="SelectedPantsId"
@@ -147,7 +153,6 @@
                 <button type="submit" name="navigation" value="next" class="bundle-next-button">Tovább</button>
             </div>
         }
-
         @if (Model.CurrentStep == 3)
         {
             <input type="hidden" name="SelectedCoatId" value="@(Model.SelectedCoatId.HasValue ? Model.SelectedCoatId.ToString() : "")" />
@@ -170,6 +175,9 @@
             <div class="bundle-product-grid">
                 @foreach (var item in Model.Boots)
                 {
+                    var inputId = "boot_" + item.ItemId;
+
+                    <div class="bundle-product-item">
                         <input type="radio"
                                id="@inputId"
                                name="SelectedBootId"
@@ -251,18 +259,23 @@
 
                 <div class="bundle-summary-row">
                     <span>Eredeti ár:</span>
+                    <strong>@Model.OriginalTotal Ft</strong>
                 </div>
 
                 <div class="bundle-summary-row">
                     <span>Kedvezmény:</span>
+                    <strong>@Model.DiscountAmount Ft</strong>
                 </div>
 
                 <div class="bundle-summary-row bundle-summary-total">
                     <span>Fizetendő:</span>
+                    <strong>@Model.DiscountedTotal Ft</strong>
                 </div>
             </div>
 
             <div class="bundle-nav">
+                <button type="submit" name="navigation" value="prev" class="bundle-prev-button">Vissza</button>
+                <button type="submit" formaction="@Url.Action("AddToCart", "Item")" class="bundle-next-button">Kosárba</button>
             </div>
         }
     </form>
