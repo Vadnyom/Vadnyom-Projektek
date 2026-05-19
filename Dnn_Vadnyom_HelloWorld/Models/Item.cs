@@ -12,6 +12,8 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Models
     [Scope("ModuleId")]
     public class Item
     {
+
+      
         public int ItemId { get; set; } = -1;
        
         public string ItemName { get; set; }
@@ -42,5 +44,9 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Models
         public int SortOrder { get; set; }
 
         public bool IsActive { get; set; } = true;
+
+
+        public string ExternalProductId { get; set; }   // Hotcakes Bvin
+        public string Sku { get; set; }
     }
 }

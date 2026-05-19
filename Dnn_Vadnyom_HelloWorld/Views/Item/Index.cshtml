@@ -1,8 +1,11 @@
 ﻿@inherits DotNetNuke.Web.Mvc.Framework.DnnWebViewPage<Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Models.BundleViewModel>
 <link rel="stylesheet" href="/DesktopModules/MVC/Dnn_Vadnyom_HelloWorld/module.css" />
 
-<div class="bundle-builder">
+<div id="bundle-builder" class="bundle-builder">
     <h1>Egyéni csomag összeállítás</h1>
+    <a href="@Url.Action("DebugCartLineTotals", "Item")" target="_blank">
+        DebugCartLineTotals
+    </a>
 
     <form id="bundleForm" method="post" action="@Url.Action("Index", "Item")">
         <input type="hidden" name="CurrentStep" value="@Model.CurrentStep" />
@@ -64,28 +67,32 @@
             <div class="bundle-product-grid">
                 @foreach (var item in Model.Coats)
                 {
-                    <div class="bundle-product-card selectable-card">
-                        <div class="bundle-card-select">
-                            <input type="radio"
-                                   name="SelectedCoatId"
-                                   value="@item.ItemId"
-                                   @(Model.SelectedCoatId == item.ItemId ? "checked=\"checked\"" : "") />
-                        </div>
+                        <input type="radio"
+                               id="@inputId"
+                               name="SelectedCoatId"
+                               value="@item.ItemId"
+                               class="bundle-radio-input"
+                               @(Model.SelectedCoatId == item.ItemId ? "checked=\"checked\"" : "") />
 
-                        <div class="bundle-product-title">@item.ItemName</div>
+                        <label for="@inputId" class="bundle-product-card selectable-card">
+                            <div class="bundle-card-select">
+                                <span class="bundle-radio-visual"></span>
+                            </div>
 
-                        <div class="bundle-product-image-wrapper">
-                            <img src="@item.ImageUrl" alt="@item.ItemName" class="bundle-product-image" />
-                        </div>
+                            <div class="bundle-product-title">@item.ItemName</div>
 
-                        <div class="bundle-product-footer">
-                            <div class="bundle-product-price">@item.Price.ToString("N0") Ft</div>
-                        </div>
+                            <div class="bundle-product-image-wrapper">
+                            </div>
+
+                            <div class="bundle-product-footer">
+                            </div>
+                        </label>
                     </div>
                 }
             </div>
 
             <div class="bundle-nav">
+                <button type="submit" name="navigation" value="home" class="bundle-home-button">Vissza a kezdőképernyőre</button>
                 <button type="submit" name="navigation" value="clear" class="bundle-clear-button">Választás törlése</button>
                 <button type="submit" name="navigation" value="next" class="bundle-next-button">Tovább</button>
             </div>
@@ -109,28 +116,32 @@
             <div class="bundle-product-grid">
                 @foreach (var item in Model.Pants)
                 {
-                    <div class="bundle-product-card selectable-card">
-                        <div class="bundle-card-select">
-                            <input type="radio"
-                                   name="SelectedPantsId"
-                                   value="@item.ItemId"
-                                   @(Model.SelectedPantsId == item.ItemId ? "checked=\"checked\"" : "") />
-                        </div>
+                        <input type="radio"
+                               id="@inputId"
+                               name="SelectedPantsId"
+                               value="@item.ItemId"
+                               class="bundle-radio-input"
+                               @(Model.SelectedPantsId == item.ItemId ? "checked=\"checked\"" : "") />
 
-                        <div class="bundle-product-title">@item.ItemName</div>
+                        <label for="@inputId" class="bundle-product-card selectable-card">
+                            <div class="bundle-card-select">
+                                <span class="bundle-radio-visual"></span>
+                            </div>
 
-                        <div class="bundle-product-image-wrapper">
-                            <img src="@item.ImageUrl" alt="@item.ItemName" class="bundle-product-image" />
-                        </div>
+                            <div class="bundle-product-title">@item.ItemName</div>
 
-                        <div class="bundle-product-footer">
-                            <div class="bundle-product-price">@item.Price.ToString("N0") Ft</div>
-                        </div>
+                            <div class="bundle-product-image-wrapper">
+                            </div>
+
+                            <div class="bundle-product-footer">
+                            </div>
+                        </label>
                     </div>
                 }
             </div>
 
             <div class="bundle-nav">
+                <button type="submit" name="navigation" value="home" class="bundle-home-button">Vissza a kezdőképernyőre</button>
                 <button type="submit" name="navigation" value="prev" class="bundle-prev-button">Vissza</button>
                 <button type="submit" name="navigation" value="clear" class="bundle-clear-button">Választás törlése</button>
                 <button type="submit" name="navigation" value="next" class="bundle-next-button">Tovább</button>
@@ -159,28 +170,32 @@
             <div class="bundle-product-grid">
                 @foreach (var item in Model.Boots)
                 {
-                    <div class="bundle-product-card selectable-card">
-                        <div class="bundle-card-select">
-                            <input type="radio"
-                                   name="SelectedBootId"
-                                   value="@item.ItemId"
-                                   @(Model.SelectedBootId == item.ItemId ? "checked=\"checked\"" : "") />
-                        </div>
+                        <input type="radio"
+                               id="@inputId"
+                               name="SelectedBootId"
+                               value="@item.ItemId"
+                               class="bundle-radio-input"
+                               @(Model.SelectedBootId == item.ItemId ? "checked=\"checked\"" : "") />
 
-                        <div class="bundle-product-title">@item.ItemName</div>
+                        <label for="@inputId" class="bundle-product-card selectable-card">
+                            <div class="bundle-card-select">
+                                <span class="bundle-radio-visual"></span>
+                            </div>
 
-                        <div class="bundle-product-image-wrapper">
-                            <img src="@item.ImageUrl" alt="@item.ItemName" class="bundle-product-image" />
-                        </div>
+                            <div class="bundle-product-title">@item.ItemName</div>
 
-                        <div class="bundle-product-footer">
-                            <div class="bundle-product-price">@item.Price.ToString("N0") Ft</div>
-                        </div>
+                            <div class="bundle-product-image-wrapper">
+                            </div>
+
+                            <div class="bundle-product-footer">
+                            </div>
+                        </label>
                     </div>
                 }
             </div>
 
             <div class="bundle-nav">
+                <button type="submit" name="navigation" value="home" class="bundle-home-button">Vissza a kezdőképernyőre</button>
                 <button type="submit" name="navigation" value="prev" class="bundle-prev-button">Vissza</button>
                 <button type="submit" name="navigation" value="clear" class="bundle-clear-button">Választás törlése</button>
                 <button type="submit" name="navigation" value="next" class="bundle-next-button">Tovább</button>
@@ -195,6 +210,19 @@
 
             <h2>Ellenőrzés</h2>
             <p class="bundle-subtitle">A kiválasztott termékek</p>
+
+            if (!Model.HasCompleteBundle)
+            {
+                <div class="bundle-warning-message">
+                    Nem jár kedvezmény, mert nem választottál mindhárom kategóriából egy terméket.
+                </div>
+            }
+            else
+            {
+                <div class="bundle-success-message">
+                    A 15% kedvezmény érvényesítve lett, mert mindhárom kategóriából választottál egy terméket.
+                </div>
+            }
 
             <div class="bundle-summary">
                 @if (Model.SelectedCoat != null)
@@ -223,23 +251,47 @@
 
                 <div class="bundle-summary-row">
                     <span>Eredeti ár:</span>
-                    <strong>@Model.OriginalTotal.ToString("N0") Ft</strong>
                 </div>
 
                 <div class="bundle-summary-row">
                     <span>Kedvezmény:</span>
-                    <strong>@Model.DiscountAmount.ToString("N0") Ft</strong>
                 </div>
 
                 <div class="bundle-summary-row bundle-summary-total">
                     <span>Fizetendő:</span>
-                    <strong>@Model.DiscountedTotal.ToString("N0") Ft</strong>
                 </div>
             </div>
 
             <div class="bundle-nav">
-                <button type="submit" name="navigation" value="prev" class="bundle-prev-button">Vissza</button>
             </div>
         }
     </form>
 </div>
+
+@if (ViewBag.ScrollToBundle == true)
+{
+    <script type="text/javascript">
+        (function () {
+            function scrollToBundle() {
+                var el = document.getElementById("bundle-builder");
+                if (el) {
+                    var y = el.getBoundingClientRect().top + window.pageYOffset - 120;
+                    window.scrollTo(0, y);
+                }
+            }
+
+            if (document.readyState === "complete" || document.readyState === "interactive") {
+                setTimeout(scrollToBundle, 300);
+            } else {
+                document.addEventListener("DOMContentLoaded", function () {
+                    setTimeout(scrollToBundle, 300);
+                });
+            }
+
+            window.addEventListener("load", function () {
+                setTimeout(scrollToBundle, 300);
+            });
+        })();
+    </script>
+
+}
