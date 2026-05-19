@@ -3,9 +3,6 @@
 
 <div id="bundle-builder" class="bundle-builder">
     <h1>Egyéni csomag összeállítás</h1>
-    <a href="@Url.Action("DebugCartLineTotals", "Item")" target="_blank">
-        DebugCartLineTotals
-    </a>
 
     <form id="bundleForm" method="post" action="@Url.Action("Index", "Item")">
         <input type="hidden" name="CurrentStep" value="@Model.CurrentStep" />
@@ -25,6 +22,7 @@
                 @Model.ErrorMessage
             </div>
         }
+
         @if (Model.CurrentStep == 0)
         {
             <div class="bundle-start-screen">
@@ -113,12 +111,6 @@
             <h2>Nadrág</h2>
             <p class="bundle-subtitle">Válassz ki egy nadrágot</p>
 
-            if (Model.SelectedCoat != null)
-            {
-                <div class="bundle-selected-box">
-                    Kiválasztott kabát: <strong>@Model.SelectedCoat.ItemName</strong>
-                </div>
-            }
 
             <div class="bundle-product-grid">
                 @foreach (var item in Model.Pants)

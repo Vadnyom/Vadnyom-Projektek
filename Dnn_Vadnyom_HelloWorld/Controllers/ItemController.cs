@@ -24,6 +24,7 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
     public class ItemController : DnnController
     {
         private readonly HotcakesApiService _apiService = new HotcakesApiService();
+
         [HttpGet]
         public ActionResult DebugCartLineTotals()
         {
@@ -93,6 +94,7 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
                 return Content("DebugCartLineTotals hiba: " + ex.ToString(), "text/plain");
             }
         }
+
         public ActionResult Index(int step = 0, int? coatId = null, int? pantsId = null, int? bootId = null)
         {
             var model = BuildModel(step, coatId, pantsId, bootId);
@@ -207,6 +209,7 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
 
             return value == null ? null : value.ToString();
         }
+
         public ActionResult RemoveBundle(string groupId)
         {
             var cartUrl = "/Kosar";
@@ -354,16 +357,6 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
                 return View("Index", model);
             }
 
-            //var context = Hotcakes.Commerce.HccRequestContext.Current;
-            //var hccApp = Hotcakes.Commerce.HotcakesApplication.Current;
-            //var cart = hccApp.OrderServices.CurrentShoppingCart();
-
-
-
-            //foreach (var item in cart.Items)
-            //{
-            //    item.
-            //}
             var bundleGroupId = "BND-" + Guid.NewGuid().ToString("N");
 
             Session["PendingBundleGroupId"] = bundleGroupId;
@@ -373,8 +366,6 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
         model.SelectedPants.Sku,
         model.SelectedBoot.Sku
     };
-
-
 
             var cartUrl = "/Kosar";
 
@@ -476,6 +467,7 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
                 item.DiscountDetails.Clear();
             }
         }
+
         private void TryPrefixBundleName(object lineItem)
         {
             if (lineItem == null)
@@ -563,7 +555,7 @@ namespace Vadnyom.Dnn.Dnn_Vadnyom_HelloWorld.Controllers
             model.OriginalTotal = selectedItems.Sum(x => x.Price);
 
             if (coatId.HasValue && pantsId.HasValue && bootId.HasValue)
-            {
+            { 
                 model.DiscountAmount = model.OriginalTotal * 0.15m;
                 model.DiscountedTotal = model.OriginalTotal - model.DiscountAmount;
             }
