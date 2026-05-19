@@ -15,12 +15,18 @@ namespace FairOrder
         private readonly HttpClient _client = new HttpClient();
         private readonly string _baseUrl = "http://20.123.45.215";
         private readonly string _apiKey = "1-ce7c4f35-5308-40ef-a54f-74ec9333e365";
+        private readonly string _kiemeltKategoriaId = "92be5c1c-cd74-4948-bf4e-f03016a4d9b9";
 
         private List<Product> _osszesTermek = new List<Product>();
         private List<KosarTetel> _kosar = new List<KosarTetel>();
-        private List<System.IO.MemoryStream> _kepStreamek = new List<System.IO.MemoryStream>(); // ← ide
+        private List<System.IO.MemoryStream> _kepStreamek = new List<System.IO.MemoryStream>();
         private FlowLayoutPanel _kivalasztottKartya = null;
         private List<Product> _kiemeltTermekek = new List<Product>();
+
+        private string _bejelentkezettEmail = "vadnyom1@gmail.com";
+        private string _bejelentkezettUserId = "1";
+        private string _bejelentkezettVezeteknev = "Felhasználó";
+        private string _bejelentkezettKeresztnev = "Teszt";
 
         private int _kiemeltKartyakSzama = 6;
 
@@ -42,10 +48,13 @@ namespace FairOrder
 
                 _osszesTermek = result?.Content?.Products ?? new List<Product>();
 
-                //FrissitdAListat(SkuSearch.Text);
 
-                //await ToltsdBeKepesLista();
                 await ToltsdBeKiemeltKartyak();
+                //var url = $"{_baseUrl}/DesktopModules/Hotcakes/API/rest/v1/products/forcategory/{_kiemeltKategoriaId}?key={_apiKey}";
+                //var json = await _client.GetStringAsync(url);
+                //var result = JsonConvert.DeserializeObject<HotcakesProductResponse>(json);
+                //_kiemeltTermekek = result?.Content?.Products ?? new List<Product>();
+                //await ToltsdBeKiemeltKartyak();
             }
             catch (Exception ex)
             {
@@ -86,7 +95,7 @@ namespace FairOrder
             //FilteredSku.DataSource = szurt;
             //FilteredSku.DisplayMember = "Sku";
         }
-//>>>>>>> 6ce0ba6f16838452f57c4756f70a68792c9cdaa7
+        //>>>>>>> 6ce0ba6f16838452f57c4756f70a68792c9cdaa7
 
 
         private void Form1_Load(object sender, EventArgs e)
@@ -139,17 +148,17 @@ namespace FairOrder
 
             try
             {
-                
+
                 var bruttoOsszeg = _kosar.Sum(k => k.SitePrice * k.Mennyiseg);
                 decimal nettoOsszeg = bruttoOsszeg / 1.27m;
                 decimal afa = bruttoOsszeg - nettoOsszeg;
-                
+
                 var orderRequest = new OrderRequest
                 {
-                    UserEmail = "vadnyom1@gmail.com",
-                    UserID = "1",
+                    UserEmail = _bejelentkezettEmail,
+                    UserID = _bejelentkezettUserId,
                     IsPlaced = true,
-                    
+
                     TotalGrand = bruttoOsszeg,
                     TotalOrderBeforeDiscounts = nettoOsszeg,
                     ItemsTax = afa,
@@ -158,8 +167,8 @@ namespace FairOrder
                     OrderNumber = nextOrderNumber,
                     BillingAddress = new BillingAddress
                     {
-                        FirstName = "Teszt",
-                        LastName = "Felhasználó",
+                        FirstName = _bejelentkezettKeresztnev,
+                        LastName = _bejelentkezettVezeteknev,
                         CountryName = "Hungary"
                     },
 
@@ -222,6 +231,10 @@ namespace FairOrder
             }
             _kosar.Clear();
             FrissitdAKosarat();
+            _bejelentkezettEmail = "vadnyom1@gmail.com";
+            _bejelentkezettVezeteknev = "Felhasználó";
+            _bejelentkezettKeresztnev = "Teszt";
+            _bejelentkezettUserId = "1";
         }
 
 
@@ -239,7 +252,7 @@ namespace FairOrder
 
         private void AddProduct_Click(object sender, EventArgs e)
         {
-            
+
             if (_kivalasztottKartya?.Tag is not Product kivalasztott)
             {
                 MessageBox.Show("Válassz ki egy terméket!");
@@ -513,6 +526,28 @@ namespace FairOrder
 
                     uresKartya.Controls.Add(plusIkon);
                     ProductImagesPanel.Controls.Add(uresKartya);
+                }
+            }
+        }
+
+        private void panel1_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void User_Click(object sender, EventArgs e)
+        {
+            var form = new Bejelentkezes(_client, _baseUrl, _apiKey);
+            if (form.ShowDialog() == DialogResult.OK)
+            {
+                _bejelentkezettEmail = form.BejelentkezettEmail;
+                _bejelentkezettVezeteknev = form.BejelentkezettVezeteknev;
+                _bejelentkezettKeresztnev = form.BejelentkezettKeresztnev;
+                _bejelentkezettUserId = form.BejelentkezettUserId;
+
+                if (!string.IsNullOrEmpty(form.BejelentkezettVezeteknev))
+                {
+                    MessageBox.Show($"Bejelentkezve: {_bejelentkezettEmail}");
                 }
             }
         }
